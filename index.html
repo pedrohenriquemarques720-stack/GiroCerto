@@ -2,292 +2,369 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Giro Certo - Gestão Financeira</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Giro Certo - Gestão Financeira Completa</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        /* ===== ESTILOS COMPLETOS E OTIMIZADOS ===== */
+        :root {
+            --primary: #1f4e78;
+            --primary-dark: #0f2a42;
+            --primary-light: #d9e1f2;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f1c40f;
+            --info: #3498db;
+            --excel: #27ae60;
+            --border: #dcdde1;
         }
 
-        body {
-            background: #f4f7fc;
-            font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        body { 
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
             overflow-x: hidden;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        /* HEADER FIXO E COMPACTO */
+        /* Header aprimorado */
         header {
-            background: linear-gradient(135deg, #0b3b4f 0%, #1a5f7a 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            width: 100%;
-            padding: 16px 12px 0 12px;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-            border-radius: 0 0 20px 20px;
+            padding: 20px 15px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .header-content h1 {
-            font-size: 1.7rem;
+        .header-content h1 { 
+            font-size: 1.8rem; 
             font-weight: 800;
-            letter-spacing: 1px;
             text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-top: 5px;
         }
 
         .motivational-box {
-            background: rgba(255, 255, 255, 0.12);
-            border-left: 4px solid #ffd966;
-            padding: 8px 12px;
-            margin: 10px auto 12px auto;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            background: rgba(255,255,255,0.15);
+            border-left: 4px solid var(--success);
+            padding: 10px 15px;
+            margin: 15px auto;
+            border-radius: 8px;
+            max-width: 500px;
+            font-size: 0.85rem;
             text-align: center;
-            max-width: 90%;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(5px);
         }
 
+        /* Tabs */
         .tabs {
             display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-top: 6px;
+            gap: 5px;
+            margin-top: 15px;
         }
 
         .tab-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            padding: 10px 18px;
-            border-radius: 40px 40px 0 0;
-            font-weight: bold;
-            font-size: 0.85rem;
-            color: #eef4ff;
-            cursor: pointer;
-            transition: 0.2s;
             flex: 1;
-            max-width: 170px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            padding: 12px;
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
         .tab-btn.active {
-            background: #f4f7fc;
-            color: #0b3b4f;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
 
+        /* Container principal */
         .container {
-            width: 100%;
-            max-width: 700px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 12px 14px 20px 14px;
+            padding: 20px 15px;
         }
 
         .tab-content {
             display: none;
-            width: 100%;
-            animation: fade 0.2s ease;
+            animation: fadeIn 0.3s ease;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        @keyframes fade {
-            from { opacity: 0; transform: translateY(6px);}
-            to { opacity: 1; transform: translateY(0);}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* KPI cards responsivos */
+        /* Cards KPI */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .kpi-card {
             background: white;
-            padding: 14px 6px;
-            border-radius: 18px;
+            padding: 18px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
             text-align: center;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.03);
-            border-bottom: 3px solid #2c7da0;
-            transition: all 0.1s;
+            transition: transform 0.2s;
+            border-bottom: 4px solid var(--primary);
         }
 
-        .kpi-card.success { border-bottom-color: #2ecc71; }
-        .kpi-card.danger { border-bottom-color: #e74c3c; }
-        .kpi-card.warning { border-bottom-color: #f39c12; }
+        .kpi-card:hover { transform: translateY(-3px); }
 
         .kpi-card h3 {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #5d6e7e;
-            letter-spacing: 0.5px;
-        }
-
-        .kpi-card p {
-            font-size: 1.35rem;
-            font-weight: 800;
-            margin: 6px 0 2px;
-            color: #1f2e3a;
-        }
-
-        .kpi-card small {
-            font-size: 0.65rem;
+            font-size: 0.8rem;
             color: #7f8c8d;
+            text-transform: uppercase;
+            margin-bottom: 8px;
         }
 
-        /* painéis sem overflow lateral */
+        .kpi-card .value {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .kpi-card .trend {
+            font-size: 0.7rem;
+            margin-top: 5px;
+        }
+
+        /* Layout principal */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Painéis */
         .panel {
             background: white;
-            border-radius: 24px;
-            padding: 18px 16px;
-            margin-bottom: 18px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            width: 100%;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .panel h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #1e5f74;
-            border-left: 5px solid #2c7da0;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
             padding-left: 12px;
-            margin-bottom: 16px;
         }
 
+        .panel h3 {
+            font-size: 1rem;
+            margin: 15px 0 10px;
+            color: var(--dark);
+        }
+
+        /* Formulários */
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 15px;
         }
 
         .form-group label {
-            font-size: 0.8rem;
-            font-weight: 600;
             display: block;
             margin-bottom: 5px;
-            color: #2c3e50;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark);
         }
 
-        input, select {
+        .form-group input,
+        .form-group select {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #d4dee5;
-            border-radius: 18px;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 0.95rem;
-            background: white;
-            transition: 0.2s;
+            transition: border-color 0.2s;
         }
 
-        button {
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Botões */
+        .btn {
             width: 100%;
-            background: #1f6e8c;
-            color: white;
             padding: 12px;
             border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-top: 6px;
+            border-radius: 8px;
+            font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s;
+            margin-top: 5px;
         }
 
-        button:active { transform: scale(0.97); background: #0e4b62;}
-
-        .btn-danger { background: #c44536; }
-        .btn-excel { background: #2a6b47; }
-
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
 
-        .table-container {
-            width: 100%;
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-excel {
+            background: var(--excel);
+            color: white;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* Tabelas */
+        .table-wrapper {
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border-radius: 20px;
+            border-radius: 10px;
         }
 
         table {
             width: 100%;
-            min-width: 460px;
             border-collapse: collapse;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
 
         th, td {
             padding: 12px 8px;
             text-align: left;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #ecf0f1;
         }
 
         th {
-            background: #eef2f5;
+            background: var(--light);
             font-weight: 700;
-            color: #2b4f6e;
+            color: var(--dark);
         }
 
-        .text-success { color: #27ae60; font-weight: 700; }
-        .text-danger { color: #e74c3c; font-weight: 700; }
-
-        .btn-del {
+        .btn-icon {
             background: none;
             border: none;
-            font-size: 1.2rem;
             cursor: pointer;
-            padding: 4px 8px;
-            width: auto;
-            color: #c0392b;
+            padding: 5px 8px;
+            border-radius: 5px;
+            transition: background 0.2s;
         }
 
-        .tag {
+        .btn-icon:hover {
+            background: #ecf0f1;
+        }
+
+        /* Tags de categoria */
+        .category-badge {
             display: inline-block;
             padding: 4px 10px;
-            border-radius: 40px;
+            border-radius: 20px;
             font-size: 0.7rem;
             font-weight: bold;
             color: white;
         }
 
-        .tag-casa { background: #2980b9; }
-        .tag-veiculo { background: #e67e22; }
-        .tag-pessoal { background: #8e44ad; }
+        .category-casa { background: var(--info); }
+        .category-veiculo { background: var(--warning); color: #333; }
+        .category-pessoal { background: #9b59b6; }
 
-        /* GRAFICO AJUSTADO: ALTURA FIXA E SEM EXPANSÃO */
-        .chart-wrapper {
-            width: 100%;
-            height: 220px;
+        /* Gráfico - CORREÇÃO DO BUG */
+        .chart-container {
             position: relative;
-            margin: 8px 0 4px 0;
+            width: 100%;
+            height: 300px;
+            margin: 15px 0;
         }
 
         canvas {
-            max-height: 100%;
-            width: 100%;
+            max-width: 100%;
+            height: auto;
         }
 
-        /* Responsivo tablet+ */
-        @media (min-width: 640px) {
-            .kpi-grid {
-                grid-template-columns: repeat(4,1fr);
-            }
-            .main-layout {
-                display: grid;
-                grid-template-columns: 1fr 1.2fr;
-                gap: 18px;
-            }
-            .container {
-                max-width: 1100px;
-            }
+        /* Utilitários */
+        .text-success { color: var(--success); font-weight: bold; }
+        .text-danger { color: var(--danger); font-weight: bold; }
+        .text-warning { color: var(--warning); font-weight: bold; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1001;
         }
     </style>
 </head>
@@ -295,379 +372,903 @@
 
 <header>
     <div class="header-content">
-        <h1>🏁 GIRO CERTO 🏍️</h1>
+        <h1>🏁 GIRO CERTO - CONTROLE TOTAL 🏍️</h1>
+        <div class="subtitle">Gestão Inteligente para Entregadores</div>
         <div class="motivational-box" id="frase-motivacional">
-            💪 "Foco, segurança e entrega: cada dia é uma nova meta!"
+            💪 "Planejamento é o combustível do sucesso!"
         </div>
     </div>
     <div class="tabs">
-        <button class="tab-btn active" onclick="mudarAba('dashboard')">📊 Painel da Rua</button>
-        <button class="tab-btn" onclick="mudarAba('contabilidade')">🏡 Minhas Contas</button>
+        <button class="tab-btn active" onclick="trocarAba('dashboard')">📊 DASHBOARD</button>
+        <button class="tab-btn" onclick="trocarAba('despesas')">💰 CONTAS</button>
+        <button class="tab-btn" onclick="trocarAba('relatorios')">📈 RELATÓRIOS</button>
     </div>
 </header>
 
 <div class="container">
-    <!-- ABA 1 - DASHBOARD PERFORMANCE -->
-    <div id="aba-dashboard" class="tab-content active">
+    <!-- ABA DASHBOARD -->
+    <div id="dashboard" class="tab-content active">
         <div class="kpi-grid">
-            <div class="kpi-card"><h3>Meta Mensal</h3><p id="kpi-meta-mensal">R$ 0</p></div>
-            <div class="kpi-card danger"><h3>Custo Diário</h3><p id="kpi-custo-diario">R$ 0</p></div>
-            <div class="kpi-card"><h3>Meta Bruto/Dia</h3><p id="kpi-faturamento-alvo">R$ 0</p></div>
-            <div class="kpi-card success"><h3>Lucro Acumulado</h3><p id="kpi-acumulado">R$ 0</p></div>
+            <div class="kpi-card">
+                <h3>🎯 Meta Mensal</h3>
+                <div class="value" id="metaMensal">R$ 0</div>
+                <div class="trend">Meta de lucro no mês</div>
+            </div>
+            <div class="kpi-card">
+                <h3>⛽ Custo Diário</h3>
+                <div class="value" id="custoDiario">R$ 0</div>
+                <div class="trend">Moto + Carro</div>
+            </div>
+            <div class="kpi-card">
+                <h3>📊 Meta Bruto/Dia</h3>
+                <div class="value" id="metaBruto">R$ 0</div>
+                <div class="trend">Faturamento necessário</div>
+            </div>
+            <div class="kpi-card">
+                <h3>💰 Lucro Acumulado</h3>
+                <div class="value" id="lucroAcumulado">R$ 0</div>
+                <div class="trend">Líquido do mês</div>
+            </div>
         </div>
 
-        <div class="main-layout">
+        <div class="main-grid">
             <div>
                 <div class="panel">
-                    <h2>⚙️ Custos & Metas</h2>
-                    <div class="form-group"><label>📦 Contas Fixas do Mês (R$)</label><input type="number" id="cfg-contas" placeholder="Ex: 2500"></div>
-                    <div class="form-group"><label>📅 Dias trabalhados no mês</label><input type="number" id="cfg-dias" placeholder="Ex: 22"></div>
-                    <div class="form-group"><label>⛽ Gasto Diário Moto (R$)</label><input type="number" id="cfg-moto" placeholder="Combustível + manutenção"></div>
-                    <div class="form-group"><label>🚗 Gasto Diário Carro (R$)</label><input type="number" id="cfg-carro" placeholder="Se usar carro"></div>
-                    <button onclick="salvarConfiguracoes()">💾 Salvar Metas</button>
+                    <h2>⚙️ CONFIGURAÇÃO DE CUSTOS</h2>
+                    <div class="form-group">
+                        <label>💰 Contas Fixas do Mês (R$)</label>
+                        <input type="number" id="contasFixas" placeholder="Aluguel, financiamento, etc">
+                    </div>
+                    <div class="form-group">
+                        <label>📅 Dias Trabalhados no Mês</label>
+                        <input type="number" id="diasTrabalho" placeholder="Ex: 22">
+                    </div>
+                    <div class="form-group">
+                        <label>🏍️ Gasto Diário Moto (R$)</label>
+                        <input type="number" id="gastoMoto" placeholder="Combustível + manutenção">
+                    </div>
+                    <div class="form-group">
+                        <label>🚗 Gasto Diário Carro (R$)</label>
+                        <input type="number" id="gastoCarro" placeholder="Se utiliza carro">
+                    </div>
+                    <button class="btn btn-primary" onclick="salvarConfiguracoes()">💾 SALVAR CONFIGURAÇÕES</button>
                 </div>
 
                 <div class="panel">
-                    <h2>📝 Registrar Dia de Rua</h2>
-                    <form id="form-registro">
-                        <div class="form-group"><label>📅 Data</label><input type="date" id="reg-data" required></div>
-                        <div class="form-group"><label>💰 Faturamento Bruto (R$)</label><input type="number" step="0.01" id="reg-bruto" placeholder="Entregas + corridas"></div>
-                        <div class="form-group"><label>⚠️ Gastos Extras (R$)</label><input type="number" step="0.01" id="reg-extra" value="0" placeholder="Lanche, pedágio etc"></div>
-                        <button type="submit">✅ Salvar Corrida do Dia</button>
+                    <h2>📝 REGISTRO DO DIA</h2>
+                    <form id="formRegistro">
+                        <div class="form-group">
+                            <label>📅 Data</label>
+                            <input type="date" id="dataRegistro" required>
+                        </div>
+                        <div class="form-group">
+                            <label>💰 Faturamento Bruto (R$)</label>
+                            <input type="number" step="0.01" id="faturamentoBruto" required>
+                        </div>
+                        <div class="form-group">
+                            <label>⚠️ Gastos Extras (R$)</label>
+                            <input type="number" step="0.01" id="gastosExtras" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Observações</label>
+                            <input type="text" id="obsRegistro" placeholder="Ex: Pneu furado, ajudante...">
+                        </div>
+                        <button type="submit" class="btn btn-primary">✅ SALVAR DIA</button>
                     </form>
                 </div>
             </div>
 
             <div>
-                <!-- GRÁFICO COMPACTO E ESTÁVEL: LINHA META VS LIQUIDO -->
                 <div class="panel">
-                    <h2>📈 Desempenho vs Meta Diária</h2>
-                    <div class="chart-wrapper">
-                        <canvas id="graficoPerformance" width="400" height="180" style="max-width:100%; height:180px; width:100%"></canvas>
+                    <h2>📈 DESEMPENHO VS META DIÁRIA</h2>
+                    <div class="chart-container">
+                        <canvas id="graficoPerformance"></canvas>
                     </div>
-                    <p style="font-size: 0.7rem; text-align:center; margin-top: 8px; color:#4b6a7c;">📌 Linha verde: lucro líquido do dia | Linha vermelha: meta de lucro diário</p>
+                    <div style="font-size: 0.7rem; text-align: center; margin-top: 10px;">
+                        🟢 Linha Verde: Lucro Líquido do Dia | 🔴 Linha Vermelha: Meta de Lucro Diário
+                    </div>
                 </div>
 
                 <div class="panel">
-                    <h2>📋 Histórico de Corridas</h2>
-                    <div class="table-container">
-                        <table id="tabela-registros">
-                            <thead><tr><th>Data</th><th>Bruto</th><th>Custo Total</th><th>Líquido</th><th>Diferença Meta</th><th></th></tr></thead>
+                    <h2>📋 HISTÓRICO DE CORRIDAS</h2>
+                    <div class="table-wrapper">
+                        <table id="tabelaHistorico">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Bruto</th>
+                                    <th>Custos</th>
+                                    <th>Líquido</th>
+                                    <th>Status Meta</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
                             <tbody></tbody>
                         </table>
                     </div>
-                    <div class="action-buttons">
-                        <button class="btn-excel" onclick="exportarExcelRua()">📎 Exportar Excel</button>
-                        <button class="btn-danger" onclick="limparDadosRua()">🗑️ Resetar Histórico</button>
+                    <div class="btn-group">
+                        <button class="btn btn-excel" onclick="exportarExcel('corridas')">📊 EXPORTAR EXCEL</button>
+                        <button class="btn btn-danger" onclick="limparHistorico()">🗑️ LIMPAR TUDO</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ABA 2 - CONTABILIDADE PESSOAL -->
-    <div id="aba-contabilidade" class="tab-content">
+    <!-- ABA DESPESAS PESSOAIS -->
+    <div id="despesas" class="tab-content">
         <div class="kpi-grid">
-            <div class="kpi-card success"><h3>💰 Vindo da Rua</h3><p id="kpi-conta-receita">R$ 0</p><small>Lucro líquido total</small></div>
-            <div class="kpi-card danger"><h3>🧾 Contas Pagas</h3><p id="kpi-conta-despesas">R$ 0</p><small>Despesas quitadas</small></div>
-            <div class="kpi-card warning"><h3>💸 Dinheiro Livre</h3><p id="kpi-conta-livre">R$ 0</p><small>Lucro - contas pagas</small></div>
+            <div class="kpi-card">
+                <h3>💰 RECEITA DA RUA</h3>
+                <div class="value" id="receitaRua">R$ 0</div>
+                <div class="trend">Lucro líquido acumulado</div>
+            </div>
+            <div class="kpi-card">
+                <h3>📋 TOTAL DESPESAS</h3>
+                <div class="value" id="totalDespesas">R$ 0</div>
+                <div class="trend">Contas pagas no mês</div>
+            </div>
+            <div class="kpi-card">
+                <h3>💵 SALDO LIVRE</h3>
+                <div class="value" id="saldoLivre">R$ 0</div>
+                <div class="trend">O que realmente sobrou</div>
+            </div>
         </div>
 
-        <div class="main-layout" style="grid-template-columns:1fr 1fr;">
-            <div class="panel">
-                <h2>➕ Registrar Conta</h2>
-                <form id="form-despesa">
-                    <div class="form-group"><label>📅 Data Pagamento</label><input type="date" id="desp-data" required></div>
-                    <div class="form-group"><label>📝 Descrição</label><input type="text" id="desp-desc" placeholder="Ex: Financiamento moto"></div>
-                    <div class="form-group"><label>🏷️ Categoria</label>
-                        <select id="desp-cat"><option value="veiculo">🚗 Veículo / Moto</option><option value="casa">🏠 Casa / Aluguel</option><option value="pessoal">🎮 Pessoal / Lazer</option></select>
-                    </div>
-                    <div class="form-group"><label>💵 Valor (R$)</label><input type="number" step="0.01" id="desp-valor" required></div>
-                    <button type="submit">📌 Registrar Pagamento</button>
-                </form>
-            </div>
-            <div class="panel">
-                <h2>📑 Extrato de Despesas</h2>
-                <div class="table-container">
-                    <table id="tabela-despesas">
-                        <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+        <div class="main-grid">
+            <div>
+                <div class="panel">
+                    <h2>➕ ADICIONAR DESPESA</h2>
+                    <form id="formDespesa">
+                        <div class="form-group">
+                            <label>📅 Data</label>
+                            <input type="date" id="dataDespesa" required>
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Descrição</label>
+                            <input type="text" id="descDespesa" required placeholder="Ex: Supermercado, Luz...">
+                        </div>
+                        <div class="form-group">
+                            <label>🏷️ Categoria</label>
+                            <select id="categoriaDespesa">
+                                <option value="casa">🏠 Contas da Casa</option>
+                                <option value="veiculo">🚗 Manutenção Veículo</option>
+                                <option value="pessoal">🎮 Pessoal / Lazer</option>
+                                <option value="saude">🏥 Saúde</option>
+                                <option value="educacao">📚 Educação</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>💵 Valor (R$)</label>
+                            <input type="number" step="0.01" id="valorDespesa" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">💸 REGISTRAR DESPESA</button>
+                    </form>
                 </div>
-                <div class="action-buttons">
-                    <button class="btn-excel" onclick="exportarExcelContabilidade()">📎 Excel</button>
-                    <button class="btn-danger" onclick="limparDadosContabilidade()">🗑️ Zerar Contas</button>
+            </div>
+
+            <div>
+                <div class="panel">
+                    <h2>📋 EXTRATO DE DESPESAS</h2>
+                    <div class="table-wrapper">
+                        <table id="tabelaDespesas">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Descrição</th>
+                                    <th>Categoria</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-excel" onclick="exportarExcel('despesas')">📊 EXPORTAR EXCEL</button>
+                        <button class="btn btn-danger" onclick="limparDespesas()">🗑️ LIMPAR DESPESAS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABA RELATÓRIOS E ANÁLISES -->
+    <div id="relatorios" class="tab-content">
+        <div class="main-grid">
+            <div>
+                <div class="panel">
+                    <h2>📊 ANÁLISE DE EFICIÊNCIA</h2>
+                    <div id="analises">
+                        <div style="margin-bottom: 20px;">
+                            <h3>🎯 Taxa de Atingimento de Metas</h3>
+                            <div id="taxaMeta" style="font-size: 2rem; font-weight: bold;"></div>
+                            <progress id="progressoMeta" value="0" max="100" style="width: 100%; height: 20px;"></progress>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h3>📈 Melhor Dia</h3>
+                            <div id="melhorDia" class="value"></div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h3>📉 Pior Dia</h3>
+                            <div id="piorDia" class="value"></div>
+                        </div>
+                        <div>
+                            <h3>⚡ Média Diária</h3>
+                            <div id="mediaDiaria" class="value"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="panel">
+                    <h2>📋 RESUMO DO MÊS</h2>
+                    <div class="chart-container">
+                        <canvas id="graficoResumo"></canvas>
+                    </div>
+                    <div class="btn-group" style="margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="gerarRelatorioCompleto()">📄 GERAR RELATÓRIO COMPLETO</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- MODAL DE CONFIRMAÇÃO -->
+<div id="modalConfirm" class="modal">
+    <div class="modal-content">
+        <h3>Confirmar ação</h3>
+        <p id="modalMensagem"></p>
+        <div class="btn-group" style="margin-top: 20px;">
+            <button class="btn btn-primary" onclick="confirmarAcao()">Sim</button>
+            <button class="btn btn-danger" onclick="fecharModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    // ---------- DADOS GLOBAIS ----------
-    let config = JSON.parse(localStorage.getItem('moto_config')) || { contas: 0, dias: 22, moto: 35, carro: 0 };
-    let registrosRua = JSON.parse(localStorage.getItem('moto_registros')) || [];
-    let despesasPessoais = JSON.parse(localStorage.getItem('moto_despesas')) || [];
-
+    // ==================== CONFIGURAÇÃO INICIAL ====================
+    let config = JSON.parse(localStorage.getItem('giro_config')) || { 
+        contas: 0, 
+        dias: 22, 
+        moto: 35, 
+        carro: 0 
+    };
+    
+    let registrosRua = JSON.parse(localStorage.getItem('giro_registros')) || [];
+    let despesasPessoais = JSON.parse(localStorage.getItem('giro_despesas')) || [];
+    
     let chartPerformance = null;
-    let lucroLiquidoTotal = 0; // será atualizado
-
+    let chartResumo = null;
+    let acaoPendente = null;
+    
     // Frases motivacionais
     const frases = [
-        "🏍️ 'Com segurança e garra, a meta é só questão de tempo!'", "💰 'Cada real economizado hoje é vitória amanhã.'",
-        "📈 'Gráfico bonito vem de disciplina na rua e em casa.'", "🚀 'Corrida firme, lucro certo: mantenha o foco!'",
-        "🧠 'Controle é combustível para o futuro da sua família.'", "🛵 'Nenhum trânsito é páreo pra quem tem planejamento.'"
+        "🏆 'Toda entrega é um passo mais perto da sua liberdade financeira!'",
+        "💪 'O sucesso é a soma de pequenos esforços repetidos dia após dia.'",
+        "🎯 'Meta batida hoje é vitória garantida amanhã!'",
+        "⚡ 'Sua disciplina na rua define seu futuro em casa.'",
+        "🚀 'Gire com foco, ganhe com consistência!'",
+        "📈 'Controle é o segredo de quem vive do volante.'"
     ];
-    document.getElementById('frase-motivacional').innerHTML = `✨ ${frases[Math.floor(Math.random() * frases.length)]}`;
-
-    // Helper formatação
-    function formatMoney(v) { return v.toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }); }
-
-    // Atualiza TUDO (Rua + Gráfico + KPI)
-    function atualizarDashboardRua() {
-        const custoFixoDiario = (config.moto || 0) + (config.carro || 0);
-        const diasTrab = config.dias > 0 ? config.dias : 1;
-        const metaLucroPorDia = config.contas / diasTrab;
-        const metaBrutoNecessario = metaLucroPorDia + custoFixoDiario;
-
-        document.getElementById('kpi-meta-mensal').innerText = formatMoney(config.contas);
-        document.getElementById('kpi-custo-diario').innerText = formatMoney(custoFixoDiario);
-        document.getElementById('kpi-faturamento-alvo').innerText = formatMoney(metaBrutoNecessario);
-        document.getElementById('cfg-contas').value = config.contas;
-        document.getElementById('cfg-dias').value = config.dias;
-        document.getElementById('cfg-moto').value = config.moto;
-        document.getElementById('cfg-carro').value = config.carro;
-
-        // calcular lucro acumulado
+    
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+        atualizarFraseMotivacional();
+        document.getElementById('dataRegistro').valueAsDate = new Date();
+        document.getElementById('dataDespesa').valueAsDate = new Date();
+        carregarDadosIniciais();
+        atualizarTudo();
+        
+        // Event listeners
+        document.getElementById('formRegistro').addEventListener('submit', salvarRegistro);
+        document.getElementById('formDespesa').addEventListener('submit', salvarDespesa);
+    });
+    
+    function atualizarFraseMotivacional() {
+        const fraseIndex = Math.floor(Math.random() * frases.length);
+        document.getElementById('frase-motivacional').innerHTML = `✨ ${frases[fraseIndex]}`;
+        setInterval(() => {
+            const newIndex = Math.floor(Math.random() * frases.length);
+            document.getElementById('frase-motivacional').innerHTML = `✨ ${frases[newIndex]}`;
+        }, 30000);
+    }
+    
+    function carregarDadosIniciais() {
+        document.getElementById('contasFixas').value = config.contas;
+        document.getElementById('diasTrabalho').value = config.dias;
+        document.getElementById('gastoMoto').value = config.moto;
+        document.getElementById('gastoCarro').value = config.carro;
+    }
+    
+    function salvarConfiguracoes() {
+        config.contas = parseFloat(document.getElementById('contasFixas').value) || 0;
+        config.dias = parseInt(document.getElementById('diasTrabalho').value) || 1;
+        config.moto = parseFloat(document.getElementById('gastoMoto').value) || 0;
+        config.carro = parseFloat(document.getElementById('gastoCarro').value) || 0;
+        
+        if(config.dias < 1) config.dias = 1;
+        
+        localStorage.setItem('giro_config', JSON.stringify(config));
+        atualizarTudo();
+        mostrarNotificacao('Configurações salvas com sucesso!', 'success');
+    }
+    
+    function salvarRegistro(e) {
+        e.preventDefault();
+        
+        const data = document.getElementById('dataRegistro').value;
+        const [ano, mes, dia] = data.split('-');
+        const dataFormatada = `${dia}/${mes}/${ano}`;
+        
+        const bruto = parseFloat(document.getElementById('faturamentoBruto').value) || 0;
+        const extra = parseFloat(document.getElementById('gastosExtras').value) || 0;
+        const obs = document.getElementById('obsRegistro').value || '';
+        
+        if(bruto === 0) {
+            mostrarNotificacao('Informe o faturamento bruto do dia!', 'error');
+            return;
+        }
+        
+        registrosRua.push({
+            id: Date.now(),
+            data: dataFormatada,
+            dataOriginal: data,
+            bruto: bruto,
+            extra: extra,
+            obs: obs,
+            criadoEm: new Date().toISOString()
+        });
+        
+        // Ordenar por data
+        registrosRua.sort((a, b) => {
+            return new Date(a.dataOriginal) - new Date(b.dataOriginal);
+        });
+        
+        localStorage.setItem('giro_registros', JSON.stringify(registrosRua));
+        
+        document.getElementById('faturamentoBruto').value = '';
+        document.getElementById('gastosExtras').value = '0';
+        document.getElementById('obsRegistro').value = '';
+        
+        atualizarTudo();
+        mostrarNotificacao('Dia registrado com sucesso! 🎉', 'success');
+    }
+    
+    function salvarDespesa(e) {
+        e.preventDefault();
+        
+        const data = document.getElementById('dataDespesa').value;
+        const [ano, mes, dia] = data.split('-');
+        const dataFormatada = `${dia}/${mes}/${ano}`;
+        
+        const descricao = document.getElementById('descDespesa').value.trim();
+        const categoria = document.getElementById('categoriaDespesa').value;
+        const valor = parseFloat(document.getElementById('valorDespesa').value) || 0;
+        
+        if(!descricao || valor <= 0) {
+            mostrarNotificacao('Preencha todos os campos corretamente!', 'error');
+            return;
+        }
+        
+        despesasPessoais.push({
+            id: Date.now(),
+            data: dataFormatada,
+            dataOriginal: data,
+            descricao: descricao,
+            categoria: categoria,
+            valor: valor,
+            criadoEm: new Date().toISOString()
+        });
+        
+        despesasPessoais.sort((a, b) => {
+            return new Date(a.dataOriginal) - new Date(b.dataOriginal);
+        });
+        
+        localStorage.setItem('giro_despesas', JSON.stringify(despesasPessoais));
+        
+        document.getElementById('descDespesa').value = '';
+        document.getElementById('valorDespesa').value = '';
+        
+        atualizarTudo();
+        mostrarNotificacao('Despesa registrada! 💸', 'success');
+    }
+    
+    function calcularCustoDiario() {
+        return (config.moto || 0) + (config.carro || 0);
+    }
+    
+    function calcularMetaLucroDiario() {
+        return config.dias > 0 ? config.contas / config.dias : 0;
+    }
+    
+    function calcularMetaBrutoDiario() {
+        return calcularMetaLucroDiario() + calcularCustoDiario();
+    }
+    
+    function calcularLucroAcumulado() {
         let acumulado = 0;
+        const custoFixo = calcularCustoDiario();
+        
         registrosRua.forEach(reg => {
-            const custoTotal = custoFixoDiario + (reg.extra || 0);
+            const custoTotal = custoFixo + (reg.extra || 0);
             const lucroDia = reg.bruto - custoTotal;
             acumulado += lucroDia;
         });
-        lucroLiquidoTotal = acumulado;
-        document.getElementById('kpi-acumulado').innerText = formatMoney(acumulado);
         
-        renderTabelaRua(metaLucroPorDia, custoFixoDiario);
-        renderGraficoCompacto(metaLucroPorDia);
-        atualizarContabilidade();
+        return acumulado;
     }
-
-    function renderTabelaRua(metaDiaria, custoFixo) {
-        const tbody = document.querySelector('#tabela-registros tbody');
+    
+    function atualizarKPIs() {
+        document.getElementById('metaMensal').innerHTML = formatarMoeda(config.contas);
+        document.getElementById('custoDiario').innerHTML = formatarMoeda(calcularCustoDiario());
+        document.getElementById('metaBruto').innerHTML = formatarMoeda(calcularMetaBrutoDiario());
+        document.getElementById('lucroAcumulado').innerHTML = formatarMoeda(calcularLucroAcumulado());
+        
+        const receitaRua = calcularLucroAcumulado();
+        const totalDespesas = despesasPessoais.reduce((sum, d) => sum + d.valor, 0);
+        const saldoLivre = receitaRua - totalDespesas;
+        
+        document.getElementById('receitaRua').innerHTML = formatarMoeda(receitaRua);
+        document.getElementById('totalDespesas').innerHTML = formatarMoeda(totalDespesas);
+        document.getElementById('saldoLivre').innerHTML = formatarMoeda(saldoLivre);
+        
+        const saldoLivreEl = document.getElementById('saldoLivre');
+        if(saldoLivre >= 0) {
+            saldoLivreEl.style.color = 'var(--success)';
+        } else {
+            saldoLivreEl.style.color = 'var(--danger)';
+        }
+    }
+    
+    function renderizarTabelaHistorico() {
+        const tbody = document.querySelector('#tabelaHistorico tbody');
         tbody.innerHTML = '';
-        if (registrosRua.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Nenhum registro de corrida</td></tr>';
+        
+        if(registrosRua.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhum registro encontrado</td></tr>';
             return;
         }
+        
+        const custoFixo = calcularCustoDiario();
+        const metaLucro = calcularMetaLucroDiario();
+        
         registrosRua.slice().reverse().forEach(reg => {
             const custoTotal = custoFixo + (reg.extra || 0);
             const lucro = reg.bruto - custoTotal;
-            const diferenca = lucro - metaDiaria;
+            const diferenca = lucro - metaLucro;
+            const status = diferenca >= 0 ? '✅ Meta batida' : '⚠️ Abaixo da meta';
+            
             tbody.innerHTML += `
                 <tr>
                     <td>${reg.data}</td>
-                    <td>${formatMoney(reg.bruto)}</td>
-                    <td>${formatMoney(custoTotal)}</td>
-                    <td class="${lucro >= 0 ? 'text-success' : 'text-danger'}">${formatMoney(lucro)}</td>
-                    <td class="${diferenca >= 0 ? 'text-success' : 'text-danger'}">${diferenca >= 0 ? '+' : ''}${formatMoney(diferenca)}</td>
-                    <td><button class="btn-del" onclick="excluirRegistro(${reg.id})">✖️</button></td>
+                    <td>${formatarMoeda(reg.bruto)}</td>
+                    <td>${formatarMoeda(custoTotal)}</td>
+                    <td class="${lucro >= 0 ? 'text-success' : 'text-danger'}">${formatarMoeda(lucro)}</td>
+                    <td class="${diferenca >= 0 ? 'text-success' : 'text-danger'}">${status} (${formatarMoeda(Math.abs(diferenca))})</td>
+                    <td>
+                        <button class="btn-icon" onclick="editarRegistro(${reg.id})" title="Editar">✏️</button>
+                        <button class="btn-icon" onclick="excluirRegistro(${reg.id})" title="Excluir">🗑️</button>
+                    </td>
                 </tr>
             `;
         });
     }
-
-    // gráfico LEVE, sem barras enormes, sem esticar tela, com altura fixa dentro do wrapper
-    function renderGraficoCompacto(metaPorDia) {
+    
+    function renderizarTabelaDespesas() {
+        const tbody = document.querySelector('#tabelaDespesas tbody');
+        tbody.innerHTML = '';
+        
+        if(despesasPessoais.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhuma despesa registrada</td></tr>';
+            return;
+        }
+        
+        const categorias = {
+            'casa': '🏠 Casa',
+            'veiculo': '🚗 Veículo',
+            'pessoal': '🎮 Pessoal',
+            'saude': '🏥 Saúde',
+            'educacao': '📚 Educação'
+        };
+        
+        despesasPessoais.slice().reverse().forEach(desp => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${desp.data}</td>
+                    <td>${desp.descricao}</td>
+                    <td><span class="category-badge category-${desp.categoria}">${categorias[desp.categoria] || desp.categoria}</span></td>
+                    <td class="text-danger">-${formatarMoeda(desp.valor)}</td>
+                    <td>
+                        <button class="btn-icon" onclick="editarDespesa(${desp.id})" title="Editar">✏️</button>
+                        <button class="btn-icon" onclick="excluirDespesa(${desp.id})" title="Excluir">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+    
+    function renderizarGraficoPerformance() {
         const ctx = document.getElementById('graficoPerformance').getContext('2d');
-        if (chartPerformance) chartPerformance.destroy();
-        if (!registrosRua.length) {
-            // gráfico vazio com mensagem
+        
+        if(chartPerformance) chartPerformance.destroy();
+        
+        if(registrosRua.length === 0) {
             chartPerformance = new Chart(ctx, {
                 type: 'line',
-                data: { labels: ['Nenhum dado'], datasets: [{ label: 'Líquido', data: [0], borderColor: '#2ecc71' }] },
-                options: { responsive: true, maintainAspectRatio: true }
+                data: {
+                    labels: ['Sem dados'],
+                    datasets: [
+                        { label: 'Lucro Líquido', data: [0], borderColor: '#2ecc71' },
+                        { label: 'Meta Diária', data: [0], borderColor: '#e74c3c' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true
+                }
             });
             return;
         }
-        const ordenados = [...registrosRua].sort((a,b) => new Date(a.id) - new Date(b.id));
-        const labels = ordenados.map(r => r.data);
-        const custoFixoDiario = (config.moto || 0) + (config.carro || 0);
-        const dadosLucro = ordenados.map(r => {
-            const custoTotal = custoFixoDiario + (r.extra || 0);
-            return Number((r.bruto - custoTotal).toFixed(2));
+        
+        const labels = registrosRua.map(r => r.data);
+        const custoFixo = calcularCustoDiario();
+        const dadosLucro = registrosRua.map(r => {
+            const custoTotal = custoFixo + (r.extra || 0);
+            return r.bruto - custoTotal;
         });
-        const linhaMeta = Array(ordenados.length).fill(metaPorDia);
-
+        const metaLucro = calcularMetaLucroDiario();
+        const linhaMeta = Array(registrosRua.length).fill(metaLucro);
+        
         chartPerformance = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [
-                    { label: '💰 Lucro Líquido Diário', data: dadosLucro, borderColor: '#2c9c6e', backgroundColor: 'rgba(46,204,113,0.05)', borderWidth: 2.5, pointRadius: 3, pointBackgroundColor: '#1e6f4c', tension: 0.2, fill: true },
-                    { label: '🎯 Meta de Lucro / Dia', data: linhaMeta, borderColor: '#e67e22', borderWidth: 2.5, borderDash: [6, 6], pointRadius: 0, fill: false }
+                    {
+                        label: '💰 Lucro Líquido Diário',
+                        data: dadosLucro,
+                        borderColor: '#2ecc71',
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#27ae60',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: '🎯 Meta de Lucro Diário',
+                        data: linhaMeta,
+                        borderColor: '#e74c3c',
+                        borderWidth: 2,
+                        borderDash: [8, 6],
+                        pointRadius: 0,
+                        fill: false
+                    }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
                 plugins: {
-                    tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${formatMoney(ctx.raw)}` } },
-                    legend: { position: 'top', labels: { font: { size: 10 } } }
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => `${context.dataset.label}: ${formatarMoeda(context.raw)}`
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
                 },
-                scales: { y: { ticks: { callback: (val) => formatMoney(val), maxTicksLimit: 5 }, grid: { color: '#e9ecef' } } }
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: (value) => formatarMoeda(value)
+                        }
+                    }
+                }
             }
         });
     }
-
+    
+    function renderizarGraficoResumo() {
+        const ctx = document.getElementById('graficoResumo').getContext('2d');
+        
+        if(chartResumo) chartResumo.destroy();
+        
+        const ultimos7Dias = registrosRua.slice(-7);
+        const labels = ultimos7Dias.map(r => r.data);
+        const valores = ultimos7Dias.map(r => r.bruto);
+        
+        chartResumo = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels.length ? labels : ['Sem dados'],
+                datasets: [
+                    {
+                        label: 'Faturamento Bruto',
+                        data: valores.length ? valores : [0],
+                        backgroundColor: '#3498db',
+                        borderRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => `Faturamento: ${formatarMoeda(context.raw)}`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: (value) => formatarMoeda(value)
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function atualizarAnalises() {
+        if(registrosRua.length === 0) {
+            document.getElementById('taxaMeta').innerHTML = '0%';
+            document.getElementById('progressoMeta').value = 0;
+            document.getElementById('melhorDia').innerHTML = 'Nenhum dado';
+            document.getElementById('piorDia').innerHTML = 'Nenhum dado';
+            document.getElementById('mediaDiaria').innerHTML = formatarMoeda(0);
+            return;
+        }
+        
+        const metaLucro = calcularMetaLucroDiario();
+        const custoFixo = calcularCustoDiario();
+        let metasBatidas = 0;
+        
+        const lucros = registrosRua.map(r => {
+            const lucro = r.bruto - (custoFixo + (r.extra || 0));
+            if(lucro >= metaLucro) metasBatidas++;
+            return lucro;
+        });
+        
+        const taxa = (metasBatidas / registrosRua.length) * 100;
+        document.getElementById('taxaMeta').innerHTML = `${taxa.toFixed(1)}%`;
+        document.getElementById('progressoMeta').value = taxa;
+        
+        const melhorLucro = Math.max(...lucros);
+        const piorLucro = Math.min(...lucros);
+        const melhorIndex = lucros.indexOf(melhorLucro);
+        const piorIndex = lucros.indexOf(piorLucro);
+        
+        document.getElementById('melhorDia').innerHTML = `${registrosRua[melhorIndex]?.data || '-'} - ${formatarMoeda(melhorLucro)}`;
+        document.getElementById('piorDia').innerHTML = `${registrosRua[piorIndex]?.data || '-'} - ${formatarMoeda(piorLucro)}`;
+        
+        const mediaLucro = lucros.reduce((a, b) => a + b, 0) / lucros.length;
+        document.getElementById('mediaDiaria').innerHTML = formatarMoeda(mediaLucro);
+    }
+    
     function excluirRegistro(id) {
-        registrosRua = registrosRua.filter(r => r.id !== id);
-        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
-        atualizarDashboardRua();
+        acaoPendente = () => {
+            registrosRua = registrosRua.filter(r => r.id !== id);
+            localStorage.setItem('giro_registros', JSON.stringify(registrosRua));
+            atualizarTudo();
+            mostrarNotificacao('Registro excluído!', 'success');
+        };
+        mostrarModal('Tem certeza que deseja excluir este registro?');
     }
-
-    function limparDadosRua() {
-        if(confirm("Tem certeza? Apagará todo o histórico de desempenho da rua.")){
-            registrosRua = [];
-            localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
-            atualizarDashboardRua();
-        }
-    }
-
-    document.getElementById('form-registro').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const dataRaw = document.getElementById('reg-data').value;
-        const [ano, mes, dia] = dataRaw.split('-');
-        const dataFormatada = `${dia}/${mes}/${ano}`;
-        const bruto = parseFloat(document.getElementById('reg-bruto').value) || 0;
-        const extra = parseFloat(document.getElementById('reg-extra').value) || 0;
-        if(bruto === 0 && extra === 0) { alert("Informe pelo menos o faturamento bruto do dia."); return; }
-        registrosRua.push({
-            id: Date.now(),
-            data: dataFormatada,
-            bruto: bruto,
-            extra: extra
-        });
-        registrosRua.sort((a,b) => a.id - b.id);
-        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
-        document.getElementById('reg-bruto').value = '';
-        document.getElementById('reg-extra').value = '0';
-        atualizarDashboardRua();
-    });
-
-    function salvarConfiguracoes() {
-        config.contas = parseFloat(document.getElementById('cfg-contas').value) || 0;
-        config.dias = parseInt(document.getElementById('cfg-dias').value) || 1;
-        config.moto = parseFloat(document.getElementById('cfg-moto').value) || 0;
-        config.carro = parseFloat(document.getElementById('cfg-carro').value) || 0;
-        if(config.dias <= 0) config.dias = 1;
-        localStorage.setItem('moto_config', JSON.stringify(config));
-        atualizarDashboardRua();
-    }
-
-    // ---------- CONTABILIDADE PESSOAL ----------
-    function atualizarContabilidade() {
-        const receitaTotal = lucroLiquidoTotal;
-        document.getElementById('kpi-conta-receita').innerText = formatMoney(receitaTotal);
-        let totalDespesas = 0;
-        const tbody = document.querySelector('#tabela-despesas tbody');
-        tbody.innerHTML = '';
-        if(despesasPessoais.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">Nenhuma conta registrada</td></tr>';
-        } else {
-            despesasPessoais.slice().reverse().forEach(d => {
-                totalDespesas += d.valor;
-                let tagClass = d.cat === 'casa' ? 'tag-casa' : (d.cat === 'veiculo' ? 'tag-veiculo' : 'tag-pessoal');
-                let nomeCat = d.cat === 'casa' ? 'Casa' : (d.cat === 'veiculo' ? 'Veículo' : 'Pessoal');
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${d.data}</td><td>${d.desc}</td>
-                        <td><span class="tag ${tagClass}">${nomeCat}</span></td>
-                        <td class="text-danger">-${formatMoney(d.valor)}</td>
-                        <td><button class="btn-del" onclick="excluirDespesa(${d.id})">✖️</button></td>
-                    </tr>
-                `;
-            });
-        }
-        document.getElementById('kpi-conta-despesas').innerText = formatMoney(totalDespesas);
-        const livre = receitaTotal - totalDespesas;
-        const elmLivre = document.getElementById('kpi-conta-livre');
-        elmLivre.innerText = formatMoney(livre);
-        elmLivre.style.color = livre >= 0 ? '#27ae60' : '#e74c3c';
-    }
-
-    document.getElementById('form-despesa').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const dataRaw = document.getElementById('desp-data').value;
-        const [ano, mes, dia] = dataRaw.split('-');
-        const dataFormat = `${dia}/${mes}/${ano}`;
-        const desc = document.getElementById('desp-desc').value.trim();
-        if(!desc) { alert("Descreva a despesa"); return; }
-        const valor = parseFloat(document.getElementById('desp-valor').value) || 0;
-        if(valor <= 0) { alert("Valor inválido"); return; }
-        despesasPessoais.push({
-            id: Date.now(),
-            data: dataFormat,
-            desc: desc,
-            cat: document.getElementById('desp-cat').value,
-            valor: valor
-        });
-        localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
-        document.getElementById('desp-desc').value = '';
-        document.getElementById('desp-valor').value = '';
-        atualizarContabilidade();
-    });
-
+    
     function excluirDespesa(id) {
-        despesasPessoais = despesasPessoais.filter(d => d.id !== id);
-        localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
-        atualizarContabilidade();
+        acaoPendente = () => {
+            despesasPessoais = despesasPessoais.filter(d => d.id !== id);
+            localStorage.setItem('giro_despesas', JSON.stringify(despesasPessoais));
+            atualizarTudo();
+            mostrarNotificacao('Despesa excluída!', 'success');
+        };
+        mostrarModal('Tem certeza que deseja excluir esta despesa?');
     }
-
-    function limparDadosContabilidade() {
-        if(confirm("Apagar todas as despesas pessoais?")) {
+    
+    function limparHistorico() {
+        acaoPendente = () => {
+            registrosRua = [];
+            localStorage.setItem('giro_registros', JSON.stringify(registrosRua));
+            atualizarTudo();
+            mostrarNotificacao('Histórico limpo!', 'success');
+        };
+        mostrarModal('Tem certeza? Isso apagará TODO o histórico de corridas!');
+    }
+    
+    function limparDespesas() {
+        acaoPendente = () => {
             despesasPessoais = [];
-            localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
-            atualizarContabilidade();
+            localStorage.setItem('giro_despesas', JSON.stringify(despesasPessoais));
+            atualizarTudo();
+            mostrarNotificacao('Despesas limpas!', 'success');
+        };
+        mostrarModal('Tem certeza? Isso apagará TODAS as despesas!');
+    }
+    
+    function editarRegistro(id) {
+        const registro = registrosRua.find(r => r.id === id);
+        if(registro) {
+            document.getElementById('dataRegistro').value = registro.dataOriginal;
+            document.getElementById('faturamentoBruto').value = registro.bruto;
+            document.getElementById('gastosExtras').value = registro.extra;
+            document.getElementById('obsRegistro').value = registro.obs || '';
+            
+            excluirRegistro(id);
+            mostrarNotificacao('Edite os dados e salve novamente', 'info');
         }
     }
-
-    function exportarExcelRua() {
-        if(!registrosRua.length) { alert("Sem dados na rua"); return; }
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(registrosRua);
-        XLSX.utils.book_append_sheet(wb, ws, "Desempenho_Rua");
-        XLSX.writeFile(wb, `GiroCerto_Rua_${new Date().toISOString().slice(0,10)}.xlsx`);
+    
+    function editarDespesa(id) {
+        const despesa = despesasPessoais.find(d => d.id === id);
+        if(despesa) {
+            document.getElementById('dataDespesa').value = despesa.dataOriginal;
+            document.getElementById('descDespesa').value = despesa.descricao;
+            document.getElementById('categoriaDespesa').value = despesa.categoria;
+            document.getElementById('valorDespesa').value = despesa.valor;
+            
+            excluirDespesa(id);
+            mostrarNotificacao('Edite os dados e salve novamente', 'info');
+        }
     }
-    function exportarExcelContabilidade() {
-        if(!despesasPessoais.length) { alert("Sem despesas registradas"); return; }
+    
+    function exportarExcel(tipo) {
+        let dados = [];
+        let nomeArquivo = '';
+        
+        if(tipo === 'corridas') {
+            dados = registrosRua.map(r => ({
+                Data: r.data,
+                'Faturamento Bruto': r.bruto,
+                'Gastos Extras': r.extra,
+                'Observações': r.obs || '',
+                'Data Registro': new Date(r.criadoEm).toLocaleString()
+            }));
+            nomeArquivo = `giro_certo_corridas_${new Date().toISOString().slice(0,10)}.xlsx`;
+        } else if(tipo === 'despesas') {
+            const categorias = {
+                'casa': 'Casa', 'veiculo': 'Veículo', 'pessoal': 'Pessoal',
+                'saude': 'Saúde', 'educacao': 'Educação'
+            };
+            dados = despesasPessoais.map(d => ({
+                Data: d.data,
+                Descrição: d.descricao,
+                Categoria: categorias[d.categoria] || d.categoria,
+                Valor: d.valor,
+                'Data Registro': new Date(d.criadoEm).toLocaleString()
+            }));
+            nomeArquivo = `giro_certo_despesas_${new Date().toISOString().slice(0,10)}.xlsx`;
+        }
+        
+        if(dados.length === 0) {
+            mostrarNotificacao('Sem dados para exportar!', 'error');
+            return;
+        }
+        
         const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(despesasPessoais);
-        XLSX.utils.book_append_sheet(wb, ws, "Minhas_Contas");
-        XLSX.writeFile(wb, `GiroCerto_Contas_${new Date().toISOString().slice(0,10)}.xlsx`);
+        const ws = XLSX.utils.json_to_sheet(dados);
+        XLSX.utils.book_append_sheet(wb, ws, 'Dados');
+        XLSX.writeFile(wb, nomeArquivo);
+        mostrarNotificacao('Exportação concluída! 📊', 'success');
     }
-
-    function mudarAba(aba) {
+    
+    function gerarRelatorioCompleto() {
+        const relatorio = {
+            periodo: new Date().toLocaleDateString(),
+            configuracoes: config,
+            totalRegistros: registrosRua.length,
+            lucroTotal: calcularLucroAcumulado(),
+            totalDespesas: despesasPessoais.reduce((s, d) => s + d.valor, 0),
+            saldoFinal: calcularLucroAcumulado() - despesasPessoais.reduce((s, d) => s + d.valor, 0),
+            registros: registrosRua,
+            despesas: despesasPessoais
+        };
+        
+        const wb = XLSX.utils.book_new();
+        const wsConfig = XLSX.utils.json_to_sheet([relatorio.configuracoes]);
+        const wsRegistros = XLSX.utils.json_to_sheet(relatorio.registros);
+        const wsDespesas = XLSX.utils.json_to_sheet(relatorio.despesas);
+        const wsResumo = XLSX.utils.json_to_sheet([{
+            'Lucro Total': relatorio.lucroTotal,
+            'Total Despesas': relatorio.totalDespesas,
+            'Saldo Final': relatorio.saldoFinal,
+            'Dias Trabalhados': relatorio.totalRegistros
+        }]);
+        
+        XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo');
+        XLSX.utils.book_append_sheet(wb, wsRegistros, 'Corridas');
+        XLSX.utils.book_append_sheet(wb, wsDespesas, 'Despesas');
+        XLSX.utils.book_append_sheet(wb, wsConfig, 'Configuracoes');
+        
+        XLSX.writeFile(wb, `relatorio_completo_${new Date().toISOString().slice(0,10)}.xlsx`);
+        mostrarNotificacao('Relatório completo gerado! 📑', 'success');
+    }
+    
+    function trocarAba(aba) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        if(aba === 'dashboard') {
-            document.querySelectorAll('.tab-btn')[0].classList.add('active');
-            document.getElementById('aba-dashboard').classList.add('active');
-            atualizarDashboardRua();
-        } else {
-            document.querySelectorAll('.tab-btn')[1].classList.add('active');
-            document.getElementById('aba-contabilidade').classList.add('active');
-            atualizarContabilidade();
+        
+        document.getElementById(aba).classList.add('active');
+        event.target.classList.add('active');
+        
+        if(aba === 'relatorios') {
+            renderizarGraficoResumo();
+            atualizarAnalises();
         }
     }
-
-    // Inicialização completa
-    function init() {
-        document.getElementById('reg-data').valueAsDate = new Date();
-        document.getElementById('desp-data').valueAsDate = new Date();
-        atualizarDashboardRua();
+    
+    function atualizarTudo() {
+        atualizarKPIs();
+        renderizarTabelaHistorico();
+        renderizarTabelaDespesas();
+        renderizarGraficoPerformance();
+        atualizarAnalises();
     }
-    init();
+    
+    // Funções auxiliares
+    function formatarMoeda(valor) {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+    
+    function mostrarNotificacao(mensagem, tipo) {
+        const notificacao = document.createElement('div');
+        notificacao.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: ${tipo === 'success' ? '#2ecc71' : tipo === 'error' ? '#e74c3c' : '#3498db'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        `;
+        notificacao.innerHTML = mensagem;
+        document.body.appendChild(notificacao);
+        
+        setTimeout(() => {
+            notificacao.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notificacao.remove(), 300);
+        }, 3000);
+    }
+    
+    function mostrarModal(mensagem) {
+        document.getElementById('modalMensagem').innerHTML = mensagem;
+        document.getElementById('modalConfirm').style.display = 'flex';
+    }
+    
+    function fecharModal() {
+        document.getElementById('modalConfirm').style.display = 'none';
+        acaoPendente = null;
+    }
+    
+    function confirmarAcao() {
+        if(acaoPendente) {
+            acaoPendente();
+            acaoPendente = null;
+        }
+        fecharModal();
+    }
+    
+    // Adicionar estilos de animação
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
 </script>
 </body>
 </html>
