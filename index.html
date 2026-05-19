@@ -20,7 +20,6 @@
             --border: #dcdde1;
         }
 
-        /* Força TODOS os elementos a calcularem a largura baseada na tela total */
         * { 
             box-sizing: border-box; 
             margin: 0; 
@@ -39,18 +38,43 @@
             align-items: center;
         }
 
+        /* HEADER ESTILIZADO E CHAMATIVO */
         header {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, #1f4e78 0%, #0f2a42 100%);
             color: white;
-            padding: 15px 15px 0 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px 15px 0 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             width: 100%;
             text-align: center;
+            position: relative;
         }
 
-        .header-content { margin-bottom: 15px; }
-        .header-content h1 { font-size: 1.5rem; }
-        .header-content p { font-size: 0.9rem; opacity: 0.9; }
+        .header-content h1 { 
+            font-size: 1.8rem; 
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            margin-bottom: 2px;
+        }
+        
+        /* Frase Motivacional Dinâmica */
+        .motivational-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 8px 12px;
+            margin: 10px auto 15px auto;
+            border-radius: 4px;
+            max-width: 500px;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
         
         .tabs {
             display: flex;
@@ -60,9 +84,9 @@
         }
 
         .tab-btn {
-            background-color: rgba(255,255,255,0.2);
+            background-color: rgba(255,255,255,0.15);
             border: none;
-            color: white;
+            color: rgba(255, 255, 255, 0.8);
             padding: 12px 10px;
             border-radius: 8px 8px 0 0;
             font-size: 0.9rem;
@@ -76,9 +100,9 @@
         .tab-btn.active {
             background-color: #f1f2f6;
             color: var(--primary);
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
         }
 
-        /* Ajustado para ocupar 100% sem folgas nas laterais no celular */
         .container { 
             width: 100%; 
             max-width: 1200px; 
@@ -89,7 +113,6 @@
         .tab-content.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Grid de cartões ocupando toda a largura perfeitamente */
         .kpi-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr);
@@ -122,7 +145,6 @@
             width: 100%; 
         }
         
-        /* Painéis ocupando 100% de largura */
         .panel { 
             background: white; 
             padding: 15px; 
@@ -156,9 +178,8 @@
         .tag-veiculo { background-color: #e67e22; }
         .tag-pessoal { background-color: #9b59b6; }
 
-        /* Ajuste do layout para telas maiores (computador) */
         @media(min-width: 768px) {
-            .header-content h1 { font-size: 2rem; }
+            .header-content h1 { font-size: 2.2rem; }
             .kpi-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
             .kpi-card p { font-size: 1.6rem; }
             .kpi-card h3 { font-size: 0.85rem; }
@@ -172,12 +193,15 @@
 
     <header>
         <div class="header-content">
-            <h1>Giro Certo</h1>
-            <p>Gestão Financeira</p>
+            <h1>🏁 Giro Certo 🏍️</h1>
+            <!-- Box de Frase que atualiza sozinha -->
+            <div class="motivational-box" id="frase-motivacional">
+                ⚡ 🧠 "Mente firme, piloto seguro. A meta do dia te espera!"
+            </div>
         </div>
         <div class="tabs">
-            <button class="tab-btn active" onclick="mudarAba('dashboard')">🏍️ Rua</button>
-            <button class="tab-btn" onclick="mudarAba('contabilidade')">🏠 Contas</button>
+            <button class="tab-btn active" onclick="mudarAba('dashboard')">🏍️ Painel da Rua</button>
+            <button class="tab-btn" onclick="mudarAba('contabilidade')">🏠 Minhas Contas</button>
         </div>
     </header>
 
@@ -354,6 +378,20 @@
 </div>
 
 <script>
+    // LISTA DE FRASES MOTIVACIONAIS PARA QUEM É DA RUA
+    const frases = [
+        "⚡ 'Acelera com juízo! Cada entrega te deixa mais perto da meta.'",
+        "🎯 'Foco na meta diária, o tanque tá cheio e o bolso vai encher!'",
+        "🛡️ 'Pilote com segurança. Alguém te espera em casa com o sorriso no rosto.'",
+        "💰 'Faturamento é vaidade, o lucro líquido é a realidade. Controle tudo!'",
+        "🚀 'Nenhum asfalto é duro demais para quem sabe onde quer chegar.'",
+        "🛣️ 'Devagar e sempre, cada corrida paga uma conta da sua vitória!'",
+        "🔥 'O motor gira, o dinheiro entra e o futuro da sua família se constrói.'"
+    ];
+
+    // Sorteia uma frase ao carregar
+    document.getElementById('frase-motivacional').innerText = frases[Math.floor(Math.random() * frases.length)];
+
     function mudarAba(abaId) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
