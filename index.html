@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <!-- Meta tag crucial para evitar zoom e ajustar 100% ao tamanho da tela do celular -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Giro Certo - Gestão Financeira</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -21,6 +20,7 @@
             --border: #dcdde1;
         }
 
+        /* Força TODOS os elementos a calcularem a largura baseada na tela total */
         * { 
             box-sizing: border-box; 
             margin: 0; 
@@ -33,19 +33,22 @@
             color: var(--dark); 
             padding: 0;
             width: 100%;
-            overflow-x: hidden; /* Evita rolagem para os lados no celular */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* HEADER E NAVEGAÇÃO (ABAS) */
         header {
             background-color: var(--primary);
             color: white;
             padding: 15px 15px 0 15px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             width: 100%;
+            text-align: center;
         }
 
-        .header-content { text-align: center; margin-bottom: 15px; }
+        .header-content { margin-bottom: 15px; }
         .header-content h1 { font-size: 1.5rem; }
         .header-content p { font-size: 0.9rem; opacity: 0.9; }
         
@@ -66,9 +69,8 @@
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
-            flex: 1; /* Faz os botões dividirem o espaço igualmente no celular */
+            flex: 1;
             max-width: 200px;
-            text-align: center;
         }
 
         .tab-btn.active {
@@ -76,22 +78,21 @@
             color: var(--primary);
         }
 
-        /* AJUSTE DE CONTAINER PARA PREENCHER A TELA SEM SAIR DELA */
+        /* Ajustado para ocupar 100% sem folgas nas laterais no celular */
         .container { 
             width: 100%; 
             max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 15px; 
+            padding: 12px;
         }
 
-        .tab-content { display: none; }
+        .tab-content { width: 100%; display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* REGRAS DO GRID DE CARTÕES (Ajustado para Celular) */
+        /* Grid de cartões ocupando toda a largura perfeitamente */
         .kpi-grid { 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* Força 2 colunas no celular para não ficar gigante */
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px; 
             margin-bottom: 15px; 
             width: 100%;
@@ -103,7 +104,8 @@
             border-radius: 8px; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
             text-align: center; 
-            border-bottom: 4px solid var(--primary); 
+            border-bottom: 4px solid var(--primary);
+            width: 100%;
         }
         .kpi-card.success { border-bottom-color: var(--success); }
         .kpi-card.danger { border-bottom-color: var(--danger); }
@@ -113,9 +115,14 @@
         .kpi-card p { font-size: 1.2rem; font-weight: bold; color: var(--dark); }
         .kpi-card small { font-size: 0.7rem; display: block; margin-top: 4px; color: #7f8c8d; }
 
-        /* LAYOUT EM COLUNAS */
-        .main-layout { display: grid; grid-template-columns: 1fr; gap: 15px; width: 100%; }
+        .main-layout { 
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
+            width: 100%; 
+        }
         
+        /* Painéis ocupando 100% de largura */
         .panel { 
             background: white; 
             padding: 15px; 
@@ -125,7 +132,7 @@
         }
         .panel h2 { font-size: 1.1rem; margin-bottom: 12px; color: var(--primary); border-left: 4px solid var(--primary); padding-left: 8px; }
 
-        .form-group { margin-bottom: 12px; }
+        .form-group { margin-bottom: 12px; width: 100%; }
         .form-group label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.85rem; }
         .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; font-size: 1rem; }
 
@@ -133,10 +140,10 @@
         button.btn-danger { background-color: var(--danger); }
         button.btn-excel { background-color: var(--excel); }
         
-        .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; width: 100%; }
 
         .table-container { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; min-width: 450px; /* Garante que a tabela não esmague no celular */ }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; min-width: 450px; }
         th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
         th { background-color: var(--light); font-weight: bold; }
 
@@ -149,13 +156,13 @@
         .tag-veiculo { background-color: #e67e22; }
         .tag-pessoal { background-color: #9b59b6; }
 
-        /* RESPONSIVIDADE PARA TELAS MAIORES (TABLETS E COMPUTADORES) */
+        /* Ajuste do layout para telas maiores (computador) */
         @media(min-width: 768px) {
             .header-content h1 { font-size: 2rem; }
             .kpi-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
             .kpi-card p { font-size: 1.6rem; }
             .kpi-card h3 { font-size: 0.85rem; }
-            .main-layout { grid-template-columns: 1fr 2fr; gap: 20px; }
+            .main-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
             .main-layout.half { grid-template-columns: 1fr 1fr; }
             table { font-size: 0.95rem; min-width: 100%; }
         }
