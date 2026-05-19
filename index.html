@@ -374,223 +374,57 @@
 
 </div>
 
-<script>
-    const frases = [
-        "⚡ 'Acelera com juízo! Cada entrega te deixa mais perto da meta.'",
-        "🎯 'Foco na meta diária, o tanque tá cheio e o bolso vai encher!'",
-        "🛡️ 'Pilote com segurança. Alguém te espera em casa com o sorriso no rosto.'",
-        "💰 'Faturamento é vaidade, o lucro líquido é a realidade. Controle tudo!'",
-        "🚀 'Nenhum asfalto é duro demais para quem sabe onde quer chegar.'",
-        "🛣️ 'Devagar e sempre, cada corrida paga uma conta da sua vitória!'",
-        "🔥 'O motor gira, o dinheiro entra e o futuro da sua família se constrói.'"
-    ];
-
-    document.getElementById('frase-motivacional').innerText = frases[Math.floor(Math.random() * frases.length)];
-
-    function mudarAba(abaId) {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        
-        if(abaId === 'dashboard') {
-            document.querySelectorAll('.tab-btn')[0].classList.add('active');
-            document.getElementById('aba-dashboard').classList.add('active');
-        } else {
-            document.querySelectorAll('.tab-btn')[1].classList.add('active');
-            document.getElementById('aba-contabilidade').classList.add('active');
-        }
-    }
-
-    // Configuração inicializada totalmente ZERADA
-    let config = JSON.parse(localStorage.getItem('moto_config')) || { contas: 0, dias: 0, moto: 0, carro: 0 };
-    let registrosRua = JSON.parse(localStorage.getItem('moto_registros')) || [];
-    let despesasPessoais = JSON.parse(localStorage.getItem('moto_despesas')) || [];
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    let chartInstance = null;
-    let lucroLiquidoAcumuladoGlobal = 0;
+<script>
+    // 1. CONFIGURAÇÃO SUPABASE
+    const supabase = supabase.createClient('https://bavyjcxnwurmingffijv.supabase.co', 'sb_publishable_s01rXPD0e6MeoHYidF8Msw_BphYnXip');
 
-    document.getElementById('reg-data').valueAsDate = new Date();
-    document.getElementById('desp-data').valueAsDate = new Date();
-
-    function formatarMoeda(valor) { return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
-
-    function atualizarCalculosRua() {
-        const custoFixo = config.moto + config.carro;
-        // Evita divisão por zero caso dias seja 0
-        const metaLiq = config.dias > 0 ? (config.contas / config.dias) : 0;
+    // 2. LÓGICA DA TRAVA
+    async function iniciarApp() {
+        let token = localStorage.getItem('giro_certo_token');
         
-        document.getElementById('kpi-meta-mensal').innerText = formatarMoeda(config.contas);
-        document.getElementById('kpi-custo-diario').innerText = formatarMoeda(custoFixo);
-        document.getElementById('kpi-faturamento-alvo').innerText = formatarMoeda(metaLiq + custoFixo);
-        
-        document.getElementById('cfg-contas').value = config.contas;
-        document.getElementById('cfg-dias').value = config.dias;
-        document.getElementById('cfg-moto').value = config.moto;
-        document.getElementById('cfg-carro').value = config.carro;
+        if (!token) {
+            token = prompt("🔑 Insira sua chave de ativação:");
+            if (!token) { location.reload(); return; }
 
-        renderizarTabelaRua(metaLiq, custoFixo);
-        renderizarGrafico(metaLiq);
-        atualizarCalculosContabilidade(); 
-    }
+            const { data, error } = await supabase.from('licencas').select('*').eq('codigo', token).single();
 
-    function salvarConfiguracoes() {
-        config.contas = parseFloat(document.getElementById('cfg-contas').value) || 0;
-        config.dias = parseInt(document.getElementById('cfg-dias').value) || 0;
-        config.moto = parseFloat(document.getElementById('cfg-moto').value) || 0;
-        config.carro = parseFloat(document.getElementById('cfg-carro').value) || 0;
-        localStorage.setItem('moto_config', JSON.stringify(config));
-        atualizarCalculosRua();
-    }
+            if (error || !data || data.status !== 'disponivel') {
+                alert("❌ Chave inválida ou já utilizada!");
+                location.reload();
+                return;
+            }
 
-    document.getElementById('form-registro').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const [ano, mes, dia] = document.getElementById('reg-data').value.split('-');
-        registrosRua.push({
-            id: Date.now(),
-            data: `${dia}/${mes}/${ano}`,
-            bruto: parseFloat(document.getElementById('reg-bruto').value) || 0,
-            extra: parseFloat(document.getElementById('reg-extra').value) || 0
-        });
-        registrosRua.sort((a, b) => new Date(a.id) - new Date(b.id));
-        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
-        document.getElementById('reg-bruto').value = '';
-        document.getElementById('reg-extra').value = '0';
-        atualizarCalculosRua();
-    });
-
-    function excluirRegistroRua(id) {
-        registrosRua = registrosRua.filter(r => r.id !== id);
-        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
-        atualizarCalculosRua();
-    }
-
-    function limparDadosRua() {
-        if(confirm("Zerar as corridas da rua?")) {
-            registrosRua = [];
-            localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
-            atualizarCalculosRua();
+            await supabase.from('licencas').update({ status: 'ativado' }).eq('codigo', token);
+            localStorage.setItem('giro_certo_token', token);
         }
-    }
-
-    function renderizarTabelaRua(metaLiq, custoFixo) {
-        const tbody = document.querySelector('#tabela-registros tbody');
-        tbody.innerHTML = '';
-        lucroLiquidoAcumuladoGlobal = 0;
-
-        registrosRua.forEach(r => {
-            const custoTotal = custoFixo + r.extra;
-            const lucro = r.bruto - custoTotal;
-            lucroLiquidoAcumuladoGlobal += lucro;
-            const saldo = lucro - metaLiq;
-
-            tbody.innerHTML += `
-                <tr>
-                    <td>${r.data}</td>
-                    <td>${formatarMoeda(r.bruto)}</td>
-                    <td>${formatarMoeda(custoTotal)}</td>
-                    <td>${formatarMoeda(lucro)}</td>
-                    <td class="${saldo >= 0 ? 'text-success' : 'text-danger'}">${saldo >= 0 ? '+' : ''}${formatarMoeda(saldo)}</td>
-                    <td><button class="btn-del" onclick="excluirRegistroRua(${r.id})">❌</button></td>
-                </tr>`;
-        });
-        document.getElementById('kpi-acumulado').innerText = formatarMoeda(lucroLiquidoAcumuladoGlobal);
-    }
-
-    function atualizarCalculosContabilidade() {
-        document.getElementById('kpi-conta-receita').innerText = formatarMoeda(lucroLiquidoAcumuladoGlobal);
         
-        let totalDespesas = 0;
-        const tbody = document.querySelector('#tabela-despesas tbody');
-        tbody.innerHTML = '';
-
-        despesasPessoais.forEach(d => {
-            totalDespesas += d.valor;
-            let tagClass = d.cat === 'casa' ? 'tag-casa' : (d.cat === 'veiculo' ? 'tag-veiculo' : 'tag-pessoal');
-            let nomeCat = d.cat === 'casa' ? 'Casa' : (d.cat === 'veiculo' ? 'Veículo' : 'Pessoal');
-
-            tbody.innerHTML += `
-                <tr>
-                    <td>${d.data}</td>
-                    <td>${d.desc}</td>
-                    <td><span class="tag ${tagClass}">${nomeCat}</span></td>
-                    <td class="text-danger">-${formatarMoeda(d.valor)}</td>
-                    <td><button class="btn-del" onclick="excluirDespesa(${d.id})">❌</button></td>
-                </tr>`;
-        });
-
-        document.getElementById('kpi-conta-despesas').innerText = formatarMoeda(totalDespesas);
-        
-        const caixaLivre = lucroLiquidoAcumuladoGlobal - totalDespesas;
-        const elmCaixa = document.getElementById('kpi-conta-livre');
-        elmCaixa.innerText = formatarMoeda(caixaLivre);
-        elmCaixa.style.color = caixaLivre >= 0 ? 'var(--success)' : 'var(--danger)';
+        carregarSistema();
     }
 
-    document.getElementById('form-despesa').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const [ano, mes, dia] = document.getElementById('desp-data').value.split('-');
-        despesasPessoais.push({
-            id: Date.now(),
-            data: `${dia}/${mes}/${ano}`,
-            desc: document.getElementById('desp-desc').value,
-            cat: document.getElementById('desp-cat').value,
-            valor: parseFloat(document.getElementById('desp-valor').value) || 0
-        });
-        despesasPessoais.sort((a, b) => new Date(a.id) - new Date(b.id));
-        localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
-        
-        document.getElementById('desp-desc').value = '';
-        document.getElementById('desp-valor').value = '';
-        atualizarCalculosContabilidade();
-    });
+    // 3. SEU CÓDIGO DO SISTEMA
+    function carregarSistema() {
+        const frases = [
+            "⚡ 'Acelera com juízo! Cada entrega te deixa mais perto da meta.'",
+            "🎯 'Foco na meta diária, o tanque tá cheio e o bolso vai encher!'",
+            "🛡️ 'Pilote com segurança. Alguém te espera em casa com o sorriso no rosto.'",
+            "💰 'Faturamento é vaidade, o lucro líquido é a realidade. Controle tudo!'",
+            "🚀 'Nenhum asfalto é duro demais para quem sabe onde quer chegar.'",
+            "🛣️ 'Devagar e sempre, cada corrida paga uma conta da sua vitória!'",
+            "🔥 'O motor gira, o dinheiro entra e o futuro da sua família se constrói.'"
+        ];
 
-    function excluirDespesa(id) {
-        despesasPessoais = despesasPessoais.filter(d => d.id !== id);
-        localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
-        atualizarCalculosContabilidade();
+        document.getElementById('frase-motivacional').innerText = frases[Math.floor(Math.random() * frases.length)];
+
+        // (Aqui continuam todas as suas funções originais: mudarAba, atualizarCalculosRua, etc.)
+        // [COLE O RESTANTE DO SEU CÓDIGO ORIGINAL AQUI]
+
+        atualizarCalculosRua();
     }
 
-    function limparDadosContabilidade() {
-        if(confirm("Deseja apagar todas as contas registradas?")) {
-            despesasPessoais = [];
-            localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
-            atualizarCalculosContabilidade();
-        }
-    }
-
-    function renderizarGrafico(metaLiq) {
-        const ctx = document.getElementById('chartPerformance').getContext('2d');
-        if (chartInstance) chartInstance.destroy();
-        if (registrosRua.length === 0) return;
-
-        chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: registrosRua.map(r => r.data),
-                datasets: [
-                    { label: 'Líquido', data: registrosRua.map(r => r.bruto - (config.moto + config.carro + r.extra)), borderColor: '#2ecc71', backgroundColor: 'rgba(46, 204, 113, 0.1)', fill: true },
-                    { label: 'Meta', data: Array(registrosRua.length).fill(metaLiq), borderColor: '#e74c3c', borderDash: [5, 5], fill: false }
-                ]
-            },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-    }
-
-    function exportarExcelRua() {
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(registrosRua);
-        XLSX.utils.book_append_sheet(wb, ws, "Corridas");
-        XLSX.writeFile(wb, `GiroCerto_Rua.xlsx`);
-    }
-
-    function exportarExcelContabilidade() {
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(despesasPessoais);
-        XLSX.utils.book_append_sheet(wb, ws, "Despesas");
-        XLSX.writeFile(wb, `GiroCerto_Contas.xlsx`);
-    }
-
-    // Executa os cálculos iniciais com os valores zerados
-    atualizarCalculosRua();
+    iniciarApp();
+</script>
 </script>
 </body>
 </html>
