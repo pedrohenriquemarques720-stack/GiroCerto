@@ -3,23 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Giro Certo - Gestão Financeira Completa</title>
+    <title>Giro Certo - Header Fixo</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        /* ===== ESTILOS COMPLETOS E OTIMIZADOS ===== */
+        /* ===== ESTILOS COMPLETOS ===== */
         :root {
             --primary: #1f4e78;
             --primary-dark: #0f2a42;
-            --primary-light: #d9e1f2;
-            --dark: #2c3e50;
-            --light: #f8f9fa;
             --success: #2ecc71;
             --danger: #e74c3c;
             --warning: #f1c40f;
             --info: #3498db;
             --excel: #27ae60;
-            --border: #dcdde1;
         }
 
         * { 
@@ -31,108 +27,106 @@
         body { 
             background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* ===== HEADER CORRIGIDO - CENTRALIZADO E ALINHADO ===== */
+        /* ===== HEADER TOTALMENTE FIXO ===== */
         header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 16px 16px 0 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            width: 100%;
+            z-index: 1000;
             text-align: center;
         }
 
         .header-content {
-            text-align: center;
+            padding: 12px 16px 8px 16px;
         }
 
         .header-content h1 { 
-            font-size: 1.4rem; 
+            font-size: 1.3rem; 
             font-weight: 800;
-            text-align: center;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            margin: 0;
-            padding: 0;
-            line-height: 1.3;
+            white-space: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .subtitle {
-            text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             opacity: 0.85;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .motivational-box {
             background: rgba(255,255,255,0.12);
             border-left: 3px solid var(--success);
-            padding: 8px 12px;
-            margin: 10px auto;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            text-align: center;
+            padding: 6px 12px;
+            margin: 8px auto;
+            border-radius: 30px;
+            font-size: 0.65rem;
             display: inline-block;
             width: auto;
             max-width: 90%;
-            backdrop-filter: blur(5px);
         }
 
-        /* Tabs corrigidas */
+        /* Tabs fixas */
         .tabs {
             display: flex;
-            gap: 6px;
-            margin-top: 12px;
-            padding: 0 0 12px 0;
+            gap: 4px;
+            padding: 0 12px 12px 12px;
             justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
 
         .tab-btn {
-            flex: 0 1 auto;
-            min-width: 100px;
+            flex: 1;
+            max-width: 120px;
             background: rgba(255,255,255,0.15);
             border: none;
-            padding: 10px 16px;
+            padding: 8px 12px;
             border-radius: 30px;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: rgba(255,255,255,0.9);
             cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .tab-btn.active {
             background: white;
             color: var(--primary);
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
-        /* Responsivo para celular pequeno */
+        /* Espaço para o header fixo */
+        .header-spacing {
+            height: 130px;
+        }
+
+        /* Ajuste para telas pequenas */
         @media (max-width: 480px) {
+            .header-spacing {
+                height: 120px;
+            }
             .header-content h1 {
-                font-size: 1.2rem;
-            }
-            .subtitle {
-                font-size: 0.65rem;
-            }
-            .motivational-box {
-                font-size: 0.65rem;
-                padding: 6px 10px;
+                font-size: 1.1rem;
+                white-space: normal;
             }
             .tab-btn {
-                min-width: 80px;
-                padding: 8px 12px;
-                font-size: 0.7rem;
+                max-width: 100px;
+                padding: 6px 10px;
+                font-size: 0.65rem;
             }
         }
 
-        /* Container principal */
+        /* Container do conteúdo (rola normal) */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -156,39 +150,37 @@
         /* Cards KPI */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
             gap: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .kpi-card {
             background: white;
-            padding: 15px 12px;
+            padding: 12px 8px;
             border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
             text-align: center;
-            transition: transform 0.2s;
-            border-bottom: 4px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom: 3px solid var(--primary);
         }
 
-        .kpi-card:hover { transform: translateY(-3px); }
-
         .kpi-card h3 {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #7f8c8d;
             text-transform: uppercase;
-            margin-bottom: 8px;
         }
 
         .kpi-card .value {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: bold;
             color: var(--dark);
+            margin-top: 4px;
         }
 
         .kpi-card .trend {
-            font-size: 0.65rem;
-            margin-top: 5px;
+            font-size: 0.6rem;
+            margin-top: 4px;
+            color: #7f8c8d;
         }
 
         /* Layout principal */
@@ -212,29 +204,23 @@
         }
 
         .panel h2 {
-            font-size: 1.1rem;
-            margin-bottom: 18px;
+            font-size: 1rem;
+            margin-bottom: 15px;
             color: var(--primary);
             border-left: 4px solid var(--primary);
-            padding-left: 12px;
-        }
-
-        .panel h3 {
-            font-size: 0.95rem;
-            margin: 15px 0 10px;
-            color: var(--dark);
+            padding-left: 10px;
         }
 
         /* Formulários */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--dark);
         }
 
@@ -243,9 +229,8 @@
             width: 100%;
             padding: 10px 12px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            transition: border-color 0.2s;
+            border-radius: 10px;
+            font-size: 0.85rem;
         }
 
         .form-group input:focus,
@@ -257,13 +242,14 @@
         /* Botões */
         .btn {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 5px;
+            font-size: 0.85rem;
         }
 
         .btn-primary {
@@ -271,18 +257,8 @@
             color: white;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
         .btn-danger {
             background: var(--danger);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
             color: white;
         }
 
@@ -301,24 +277,24 @@
         /* Tabelas */
         .table-wrapper {
             overflow-x: auto;
-            border-radius: 10px;
             -webkit-overflow-scrolling: touch;
+            border-radius: 10px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         th, td {
-            padding: 10px 8px;
+            padding: 10px 6px;
             text-align: left;
             border-bottom: 1px solid #ecf0f1;
         }
 
         th {
-            background: var(--light);
+            background: #f1f5f9;
             font-weight: 700;
             color: var(--dark);
         }
@@ -327,49 +303,41 @@
             background: none;
             border: none;
             cursor: pointer;
-            padding: 5px 8px;
+            padding: 4px 6px;
             border-radius: 5px;
-            transition: background 0.2s;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
-        .btn-icon:hover {
-            background: #ecf0f1;
+        /* Gráfico - ALTURA CONTROLADA */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            margin: 10px 0;
         }
 
-        /* Tags de categoria */
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Tags */
         .category-badge {
             display: inline-block;
             padding: 3px 8px;
             border-radius: 20px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: bold;
             color: white;
         }
-
         .category-casa { background: var(--info); }
         .category-veiculo { background: var(--warning); color: #333; }
         .category-pessoal { background: #9b59b6; }
         .category-saude { background: #e74c3c; }
         .category-educacao { background: #1abc9c; }
 
-        /* Gráfico - CORREÇÃO DO BUG */
-        .chart-container {
-            position: relative;
-            width: 100%;
-            height: 280px;
-            margin: 15px 0;
-        }
-
-        canvas {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Utilitários */
         .text-success { color: var(--success); font-weight: bold; }
         .text-danger { color: var(--danger); font-weight: bold; }
-        .text-warning { color: var(--warning); font-weight: bold; }
 
         /* Modal */
         .modal {
@@ -380,16 +348,15 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.5);
-            z-index: 1000;
+            z-index: 2000;
             justify-content: center;
             align-items: center;
         }
-
         .modal-content {
             background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 15px;
-            max-width: 350px;
+            max-width: 300px;
             width: 90%;
             text-align: center;
         }
@@ -397,6 +364,7 @@
 </head>
 <body>
 
+<!-- HEADER FIXO (NUNCA SAI DA TELA) -->
 <header>
     <div class="header-content">
         <h1>🏁 GIRO CERTO - CONTROLE TOTAL 🏍️</h1>
@@ -412,6 +380,10 @@
     </div>
 </header>
 
+<!-- ESPAÇO RESERVADO PARA O HEADER FIXO -->
+<div class="header-spacing"></div>
+
+<!-- CONTEÚDO PRINCIPAL (ROLA NORMALMENTE) -->
 <div class="container">
     <!-- ABA DASHBOARD -->
     <div id="dashboard" class="tab-content active">
@@ -444,7 +416,7 @@
                     <h2>⚙️ CONFIGURAÇÃO DE CUSTOS</h2>
                     <div class="form-group">
                         <label>💰 Contas Fixas do Mês (R$)</label>
-                        <input type="number" id="contasFixas" placeholder="Aluguel, financiamento, etc">
+                        <input type="number" id="contasFixas" placeholder="Aluguel, financiamento">
                     </div>
                     <div class="form-group">
                         <label>📅 Dias Trabalhados no Mês</label>
@@ -458,7 +430,7 @@
                         <label>🚗 Gasto Diário Carro (R$)</label>
                         <input type="number" id="gastoCarro" placeholder="Se utiliza carro">
                     </div>
-                    <button class="btn btn-primary" onclick="salvarConfiguracoes()">💾 SALVAR CONFIGURAÇÕES</button>
+                    <button class="btn btn-primary" onclick="salvarConfiguracoes()">💾 SALVAR</button>
                 </div>
 
                 <div class="panel">
@@ -478,7 +450,7 @@
                         </div>
                         <div class="form-group">
                             <label>📝 Observações</label>
-                            <input type="text" id="obsRegistro" placeholder="Ex: Pneu furado, ajudante...">
+                            <input type="text" id="obsRegistro" placeholder="Ex: Pneu furado...">
                         </div>
                         <button type="submit" class="btn btn-primary">✅ SALVAR DIA</button>
                     </form>
@@ -491,8 +463,8 @@
                     <div class="chart-container">
                         <canvas id="graficoPerformance"></canvas>
                     </div>
-                    <div style="font-size: 0.7rem; text-align: center; margin-top: 10px;">
-                        🟢 Linha Verde: Lucro Líquido do Dia | 🔴 Linha Vermelha: Meta de Lucro Diário
+                    <div style="font-size: 0.65rem; text-align: center; margin-top: 8px;">
+                        🟢 Verde: Lucro Líquido | 🔴 Vermelho: Meta Diária
                     </div>
                 </div>
 
@@ -500,45 +472,33 @@
                     <h2>📋 HISTÓRICO DE CORRIDAS</h2>
                     <div class="table-wrapper">
                         <table id="tabelaHistorico">
-                            <thead>
-                                <tr>
-                                    <th>Data</th>
-                                    <th>Bruto</th>
-                                    <th>Custos</th>
-                                    <th>Líquido</th>
-                                    <th>Status Meta</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Data</th><th>Bruto</th><th>Custos</th><th>Líquido</th><th>Status</th><th></th></tr></thead>
                             <tbody></tbody>
                         </table>
                     </div>
                     <div class="btn-group">
-                        <button class="btn btn-excel" onclick="exportarExcel('corridas')">📊 EXPORTAR EXCEL</button>
-                        <button class="btn btn-danger" onclick="limparHistorico()">🗑️ LIMPAR TUDO</button>
+                        <button class="btn btn-excel" onclick="exportarExcel('corridas')">📊 EXPORTAR</button>
+                        <button class="btn btn-danger" onclick="limparHistorico()">🗑️ LIMPAR</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ABA DESPESAS PESSOAIS -->
+    <!-- ABA DESPESAS -->
     <div id="despesas" class="tab-content">
         <div class="kpi-grid">
             <div class="kpi-card">
                 <h3>💰 RECEITA DA RUA</h3>
                 <div class="value" id="receitaRua">R$ 0</div>
-                <div class="trend">Lucro líquido acumulado</div>
             </div>
             <div class="kpi-card">
                 <h3>📋 TOTAL DESPESAS</h3>
                 <div class="value" id="totalDespesas">R$ 0</div>
-                <div class="trend">Contas pagas no mês</div>
             </div>
             <div class="kpi-card">
                 <h3>💵 SALDO LIVRE</h3>
                 <div class="value" id="saldoLivre">R$ 0</div>
-                <div class="trend">O que realmente sobrou</div>
             </div>
         </div>
 
@@ -553,14 +513,14 @@
                         </div>
                         <div class="form-group">
                             <label>📝 Descrição</label>
-                            <input type="text" id="descDespesa" required placeholder="Ex: Supermercado, Luz...">
+                            <input type="text" id="descDespesa" required placeholder="Ex: Supermercado">
                         </div>
                         <div class="form-group">
                             <label>🏷️ Categoria</label>
                             <select id="categoriaDespesa">
-                                <option value="casa">🏠 Contas da Casa</option>
-                                <option value="veiculo">🚗 Manutenção Veículo</option>
-                                <option value="pessoal">🎮 Pessoal / Lazer</option>
+                                <option value="casa">🏠 Casa</option>
+                                <option value="veiculo">🚗 Veículo</option>
+                                <option value="pessoal">🎮 Pessoal</option>
                                 <option value="saude">🏥 Saúde</option>
                                 <option value="educacao">📚 Educação</option>
                             </select>
@@ -569,61 +529,51 @@
                             <label>💵 Valor (R$)</label>
                             <input type="number" step="0.01" id="valorDespesa" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">💸 REGISTRAR DESPESA</button>
+                        <button type="submit" class="btn btn-primary">💸 REGISTRAR</button>
                     </form>
                 </div>
             </div>
 
             <div>
                 <div class="panel">
-                    <h2>📋 EXTRATO DE DESPESAS</h2>
+                    <h2>📋 EXTRATO</h2>
                     <div class="table-wrapper">
                         <table id="tabelaDespesas">
-                            <thead>
-                                <tr>
-                                    <th>Data</th>
-                                    <th>Descrição</th>
-                                    <th>Categoria</th>
-                                    <th>Valor</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead>
                             <tbody></tbody>
                         </table>
                     </div>
                     <div class="btn-group">
-                        <button class="btn btn-excel" onclick="exportarExcel('despesas')">📊 EXPORTAR EXCEL</button>
-                        <button class="btn btn-danger" onclick="limparDespesas()">🗑️ LIMPAR DESPESAS</button>
+                        <button class="btn btn-excel" onclick="exportarExcel('despesas')">📊 EXPORTAR</button>
+                        <button class="btn btn-danger" onclick="limparDespesas()">🗑️ LIMPAR</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ABA RELATÓRIOS E ANÁLISES -->
+    <!-- ABA RELATÓRIOS -->
     <div id="relatorios" class="tab-content">
         <div class="main-grid">
             <div>
                 <div class="panel">
-                    <h2>📊 ANÁLISE DE EFICIÊNCIA</h2>
-                    <div id="analises">
-                        <div style="margin-bottom: 20px;">
-                            <h3>🎯 Taxa de Atingimento de Metas</h3>
-                            <div id="taxaMeta" style="font-size: 1.8rem; font-weight: bold;"></div>
-                            <progress id="progressoMeta" value="0" max="100" style="width: 100%; height: 20px; border-radius: 10px;"></progress>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <h3>📈 Melhor Dia</h3>
-                            <div id="melhorDia" class="value" style="font-size: 1rem;"></div>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <h3>📉 Pior Dia</h3>
-                            <div id="piorDia" class="value" style="font-size: 1rem;"></div>
-                        </div>
-                        <div>
-                            <h3>⚡ Média Diária</h3>
-                            <div id="mediaDiaria" class="value" style="font-size: 1.2rem;"></div>
-                        </div>
+                    <h2>📊 ANÁLISE</h2>
+                    <div style="margin-bottom: 15px;">
+                        <h3>🎯 Taxa de Atingimento</h3>
+                        <div id="taxaMeta" style="font-size: 1.8rem; font-weight: bold;"></div>
+                        <progress id="progressoMeta" value="0" max="100" style="width: 100%; height: 15px; border-radius: 10px;"></progress>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <h3>📈 Melhor Dia</h3>
+                        <div id="melhorDia"></div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <h3>📉 Pior Dia</h3>
+                        <div id="piorDia"></div>
+                    </div>
+                    <div>
+                        <h3>⚡ Média Diária</h3>
+                        <div id="mediaDiaria" style="font-size: 1.2rem; font-weight: bold;"></div>
                     </div>
                 </div>
             </div>
@@ -633,21 +583,19 @@
                     <div class="chart-container">
                         <canvas id="graficoResumo"></canvas>
                     </div>
-                    <div class="btn-group" style="margin-top: 20px;">
-                        <button class="btn btn-primary" onclick="gerarRelatorioCompleto()">📄 GERAR RELATÓRIO COMPLETO</button>
-                    </div>
+                    <button class="btn btn-primary" onclick="gerarRelatorioCompleto()" style="margin-top: 15px;">📄 RELATÓRIO COMPLETO</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- MODAL DE CONFIRMAÇÃO -->
+<!-- MODAL -->
 <div id="modalConfirm" class="modal">
     <div class="modal-content">
-        <h3>Confirmar ação</h3>
-        <p id="modalMensagem" style="margin-top: 15px;"></p>
-        <div class="btn-group" style="margin-top: 20px;">
+        <h3>Confirmar</h3>
+        <p id="modalMensagem" style="margin: 15px 0;"></p>
+        <div class="btn-group">
             <button class="btn btn-primary" onclick="confirmarAcao()">Sim</button>
             <button class="btn btn-danger" onclick="fecharModal()">Cancelar</button>
         </div>
@@ -655,642 +603,268 @@
 </div>
 
 <script>
-    // ==================== CONFIGURAÇÃO INICIAL ====================
-    let config = JSON.parse(localStorage.getItem('giro_config')) || { 
-        contas: 0, 
-        dias: 22, 
-        moto: 35, 
-        carro: 0 
-    };
-    
+    // CONFIGURAÇÃO
+    let config = JSON.parse(localStorage.getItem('giro_config')) || { contas: 0, dias: 22, moto: 35, carro: 0 };
     let registrosRua = JSON.parse(localStorage.getItem('giro_registros')) || [];
     let despesasPessoais = JSON.parse(localStorage.getItem('giro_despesas')) || [];
     
     let chartPerformance = null;
     let chartResumo = null;
     let acaoPendente = null;
-    
-    // Frases motivacionais
+
     const frases = [
-        "🏆 'Toda entrega é um passo mais perto da sua liberdade financeira!'",
-        "💪 'O sucesso é a soma de pequenos esforços repetidos dia após dia.'",
-        "🎯 'Meta batida hoje é vitória garantida amanhã!'",
-        "⚡ 'Sua disciplina na rua define seu futuro em casa.'",
-        "🚀 'Gire com foco, ganhe com consistência!'",
-        "📈 'Controle é o segredo de quem vive do volante.'"
+        "🏆 'Toda entrega é um passo para sua liberdade!'",
+        "💪 'Pequenos esforços repetidos geram grandes resultados.'",
+        "🎯 'Meta batida hoje é vitória amanhã!'",
+        "⚡ 'Disciplina na rua = futuro em casa.'",
+        "🚀 'Gire com foco, ganhe com consistência!'"
     ];
-    
-    // Inicialização
+
     document.addEventListener('DOMContentLoaded', () => {
-        atualizarFraseMotivacional();
+        atualizarFrase();
         document.getElementById('dataRegistro').valueAsDate = new Date();
         document.getElementById('dataDespesa').valueAsDate = new Date();
-        carregarDadosIniciais();
+        carregarDados();
         atualizarTudo();
-        
-        // Event listeners
         document.getElementById('formRegistro').addEventListener('submit', salvarRegistro);
         document.getElementById('formDespesa').addEventListener('submit', salvarDespesa);
     });
-    
-    function atualizarFraseMotivacional() {
-        const fraseIndex = Math.floor(Math.random() * frases.length);
-        document.getElementById('frase-motivacional').innerHTML = `✨ ${frases[fraseIndex]}`;
+
+    function atualizarFrase() {
+        const idx = Math.floor(Math.random() * frases.length);
+        document.getElementById('frase-motivacional').innerHTML = `✨ ${frases[idx]}`;
         setInterval(() => {
-            const newIndex = Math.floor(Math.random() * frases.length);
-            document.getElementById('frase-motivacional').innerHTML = `✨ ${frases[newIndex]}`;
+            const newIdx = Math.floor(Math.random() * frases.length);
+            document.getElementById('frase-motivacional').innerHTML = `✨ ${frases[newIdx]}`;
         }, 30000);
     }
-    
-    function carregarDadosIniciais() {
+
+    function carregarDados() {
         document.getElementById('contasFixas').value = config.contas;
         document.getElementById('diasTrabalho').value = config.dias;
         document.getElementById('gastoMoto').value = config.moto;
         document.getElementById('gastoCarro').value = config.carro;
     }
-    
+
     function salvarConfiguracoes() {
         config.contas = parseFloat(document.getElementById('contasFixas').value) || 0;
         config.dias = parseInt(document.getElementById('diasTrabalho').value) || 1;
         config.moto = parseFloat(document.getElementById('gastoMoto').value) || 0;
         config.carro = parseFloat(document.getElementById('gastoCarro').value) || 0;
-        
         if(config.dias < 1) config.dias = 1;
-        
         localStorage.setItem('giro_config', JSON.stringify(config));
         atualizarTudo();
-        mostrarNotificacao('Configurações salvas com sucesso!', 'success');
+        notificar('Configurações salvas!', 'success');
     }
-    
+
     function salvarRegistro(e) {
         e.preventDefault();
-        
         const data = document.getElementById('dataRegistro').value;
         const [ano, mes, dia] = data.split('-');
-        const dataFormatada = `${dia}/${mes}/${ano}`;
-        
         const bruto = parseFloat(document.getElementById('faturamentoBruto').value) || 0;
         const extra = parseFloat(document.getElementById('gastosExtras').value) || 0;
         const obs = document.getElementById('obsRegistro').value || '';
-        
-        if(bruto === 0) {
-            mostrarNotificacao('Informe o faturamento bruto do dia!', 'error');
-            return;
-        }
+        if(bruto === 0) { notificar('Informe o faturamento!', 'error'); return; }
         
         registrosRua.push({
             id: Date.now(),
-            data: dataFormatada,
+            data: `${dia}/${mes}/${ano}`,
             dataOriginal: data,
-            bruto: bruto,
-            extra: extra,
-            obs: obs,
+            bruto, extra, obs,
             criadoEm: new Date().toISOString()
         });
-        
-        registrosRua.sort((a, b) => {
-            return new Date(a.dataOriginal) - new Date(b.dataOriginal);
-        });
-        
+        registrosRua.sort((a,b) => new Date(a.dataOriginal) - new Date(b.dataOriginal));
         localStorage.setItem('giro_registros', JSON.stringify(registrosRua));
-        
         document.getElementById('faturamentoBruto').value = '';
         document.getElementById('gastosExtras').value = '0';
         document.getElementById('obsRegistro').value = '';
-        
         atualizarTudo();
-        mostrarNotificacao('Dia registrado com sucesso! 🎉', 'success');
+        notificar('Dia registrado! 🎉', 'success');
     }
-    
+
     function salvarDespesa(e) {
         e.preventDefault();
-        
         const data = document.getElementById('dataDespesa').value;
         const [ano, mes, dia] = data.split('-');
-        const dataFormatada = `${dia}/${mes}/${ano}`;
-        
         const descricao = document.getElementById('descDespesa').value.trim();
         const categoria = document.getElementById('categoriaDespesa').value;
         const valor = parseFloat(document.getElementById('valorDespesa').value) || 0;
-        
-        if(!descricao || valor <= 0) {
-            mostrarNotificacao('Preencha todos os campos corretamente!', 'error');
-            return;
-        }
+        if(!descricao || valor <= 0) { notificar('Preencha corretamente!', 'error'); return; }
         
         despesasPessoais.push({
             id: Date.now(),
-            data: dataFormatada,
+            data: `${dia}/${mes}/${ano}`,
             dataOriginal: data,
-            descricao: descricao,
-            categoria: categoria,
-            valor: valor,
+            descricao, categoria, valor,
             criadoEm: new Date().toISOString()
         });
-        
-        despesasPessoais.sort((a, b) => {
-            return new Date(a.dataOriginal) - new Date(b.dataOriginal);
-        });
-        
+        despesasPessoais.sort((a,b) => new Date(a.dataOriginal) - new Date(b.dataOriginal));
         localStorage.setItem('giro_despesas', JSON.stringify(despesasPessoais));
-        
         document.getElementById('descDespesa').value = '';
         document.getElementById('valorDespesa').value = '';
-        
         atualizarTudo();
-        mostrarNotificacao('Despesa registrada! 💸', 'success');
+        notificar('Despesa registrada! 💸', 'success');
     }
-    
-    function calcularCustoDiario() {
-        return (config.moto || 0) + (config.carro || 0);
+
+    function custoDiario() { return (config.moto || 0) + (config.carro || 0); }
+    function metaLucroDiario() { return config.dias > 0 ? config.contas / config.dias : 0; }
+    function metaBrutoDiario() { return metaLucroDiario() + custoDiario(); }
+    function lucroAcumulado() {
+        let total = 0;
+        const fixo = custoDiario();
+        registrosRua.forEach(r => { total += r.bruto - (fixo + (r.extra || 0)); });
+        return total;
     }
-    
-    function calcularMetaLucroDiario() {
-        return config.dias > 0 ? config.contas / config.dias : 0;
-    }
-    
-    function calcularMetaBrutoDiario() {
-        return calcularMetaLucroDiario() + calcularCustoDiario();
-    }
-    
-    function calcularLucroAcumulado() {
-        let acumulado = 0;
-        const custoFixo = calcularCustoDiario();
-        
-        registrosRua.forEach(reg => {
-            const custoTotal = custoFixo + (reg.extra || 0);
-            const lucroDia = reg.bruto - custoTotal;
-            acumulado += lucroDia;
-        });
-        
-        return acumulado;
-    }
-    
+
     function atualizarKPIs() {
-        document.getElementById('metaMensal').innerHTML = formatarMoeda(config.contas);
-        document.getElementById('custoDiario').innerHTML = formatarMoeda(calcularCustoDiario());
-        document.getElementById('metaBruto').innerHTML = formatarMoeda(calcularMetaBrutoDiario());
-        document.getElementById('lucroAcumulado').innerHTML = formatarMoeda(calcularLucroAcumulado());
+        document.getElementById('metaMensal').innerHTML = formatar(config.contas);
+        document.getElementById('custoDiario').innerHTML = formatar(custoDiario());
+        document.getElementById('metaBruto').innerHTML = formatar(metaBrutoDiario());
+        document.getElementById('lucroAcumulado').innerHTML = formatar(lucroAcumulado());
         
-        const receitaRua = calcularLucroAcumulado();
-        const totalDespesas = despesasPessoais.reduce((sum, d) => sum + d.valor, 0);
-        const saldoLivre = receitaRua - totalDespesas;
-        
-        document.getElementById('receitaRua').innerHTML = formatarMoeda(receitaRua);
-        document.getElementById('totalDespesas').innerHTML = formatarMoeda(totalDespesas);
-        document.getElementById('saldoLivre').innerHTML = formatarMoeda(saldoLivre);
-        
-        const saldoLivreEl = document.getElementById('saldoLivre');
-        if(saldoLivre >= 0) {
-            saldoLivreEl.style.color = 'var(--success)';
-        } else {
-            saldoLivreEl.style.color = 'var(--danger)';
-        }
+        const receita = lucroAcumulado();
+        const totalDesp = despesasPessoais.reduce((s,d) => s + d.valor, 0);
+        document.getElementById('receitaRua').innerHTML = formatar(receita);
+        document.getElementById('totalDespesas').innerHTML = formatar(totalDesp);
+        document.getElementById('saldoLivre').innerHTML = formatar(receita - totalDesp);
     }
-    
-    function renderizarTabelaHistorico() {
-        const tbody = document.querySelector('#tabelaHistorico tbody');
-        tbody.innerHTML = '';
-        
-        if(registrosRua.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhum registro encontrado</td></tr>';
-            return;
-        }
-        
-        const custoFixo = calcularCustoDiario();
-        const metaLucro = calcularMetaLucroDiario();
-        
-        [...registrosRua].reverse().forEach(reg => {
-            const custoTotal = custoFixo + (reg.extra || 0);
-            const lucro = reg.bruto - custoTotal;
-            const diferenca = lucro - metaLucro;
-            const status = diferenca >= 0 ? '✅ Meta batida' : '⚠️ Abaixo da meta';
-            
-            tbody.innerHTML += `
-                <tr>
-                    <td>${reg.data}</td>
-                    <td>${formatarMoeda(reg.bruto)}</td>
-                    <td>${formatarMoeda(custoTotal)}</td>
-                    <td class="${lucro >= 0 ? 'text-success' : 'text-danger'}">${formatarMoeda(lucro)}</td>
-                    <td class="${diferenca >= 0 ? 'text-success' : 'text-danger'}">${status} (${formatarMoeda(Math.abs(diferenca))})</td>
-                    <td>
-                        <button class="btn-icon" onclick="editarRegistro(${reg.id})" title="Editar">✏️</button>
-                        <button class="btn-icon" onclick="excluirRegistro(${reg.id})" title="Excluir">🗑️</button>
-                    </td>
-                </tr>
-            `;
+
+    function renderizarTabelas() {
+        const tbody1 = document.querySelector('#tabelaHistorico tbody');
+        tbody1.innerHTML = '';
+        const fixo = custoDiario();
+        const meta = metaLucroDiario();
+        [...registrosRua].reverse().forEach(r => {
+            const custo = fixo + (r.extra || 0);
+            const lucro = r.bruto - custo;
+            const diff = lucro - meta;
+            tbody1.innerHTML += `<tr>
+                <td>${r.data}</td><td>${formatar(r.bruto)}</td><td>${formatar(custo)}</td>
+                <td class="${lucro>=0?'text-success':'text-danger'}">${formatar(lucro)}</td>
+                <td class="${diff>=0?'text-success':'text-danger'}">${diff>=0?'✅':'⚠️'} ${formatar(Math.abs(diff))}</td>
+                <td><button class="btn-icon" onclick="excluirRegistro(${r.id})">🗑️</button></td>
+            </tr>`;
+        });
+
+        const tbody2 = document.querySelector('#tabelaDespesas tbody');
+        tbody2.innerHTML = '';
+        const cats = { casa:'🏠 Casa', veiculo:'🚗 Veículo', pessoal:'🎮 Pessoal', saude:'🏥 Saúde', educacao:'📚 Educação' };
+        [...despesasPessoais].reverse().forEach(d => {
+            tbody2.innerHTML += `<tr>
+                <td>${d.data}</td><td>${d.descricao}</td>
+                <td><span class="category-badge category-${d.categoria}">${cats[d.categoria]}</span></td>
+                <td class="text-danger">-${formatar(d.valor)}</td>
+                <td><button class="btn-icon" onclick="excluirDespesa(${d.id})">🗑️</button></td>
+            </tr>`;
         });
     }
-    
-    function renderizarTabelaDespesas() {
-        const tbody = document.querySelector('#tabelaDespesas tbody');
-        tbody.innerHTML = '';
-        
-        if(despesasPessoais.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhuma despesa registrada</td></tr>';
-            return;
-        }
-        
-        const categorias = {
-            'casa': '🏠 Casa',
-            'veiculo': '🚗 Veículo',
-            'pessoal': '🎮 Pessoal',
-            'saude': '🏥 Saúde',
-            'educacao': '📚 Educação'
-        };
-        
-        [...despesasPessoais].reverse().forEach(desp => {
-            tbody.innerHTML += `
-                <tr>
-                    <td>${desp.data}</td>
-                    <td>${desp.descricao}</td>
-                    <td><span class="category-badge category-${desp.categoria}">${categorias[desp.categoria] || desp.categoria}</span></td>
-                    <td class="text-danger">-${formatarMoeda(desp.valor)}</td>
-                    <td>
-                        <button class="btn-icon" onclick="editarDespesa(${desp.id})" title="Editar">✏️</button>
-                        <button class="btn-icon" onclick="excluirDespesa(${desp.id})" title="Excluir">🗑️</button>
-                    </td>
-                </tr>
-            `;
-        });
-    }
-    
-    function renderizarGraficoPerformance() {
+
+    function renderizarGraficos() {
         const ctx = document.getElementById('graficoPerformance').getContext('2d');
-        
         if(chartPerformance) chartPerformance.destroy();
-        
         if(registrosRua.length === 0) {
+            chartPerformance = new Chart(ctx, { type:'line', data:{ labels:['Sem dados'], datasets:[{ label:'Lucro', data:[0] }] }, options:{ responsive:true, maintainAspectRatio:true } });
+        } else {
+            const labels = registrosRua.map(r => r.data);
+            const fixo = custoDiario();
+            const lucros = registrosRua.map(r => r.bruto - (fixo + (r.extra||0)));
+            const meta = metaLucroDiario();
             chartPerformance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Sem dados'],
-                    datasets: [
-                        { label: 'Lucro Líquido', data: [0], borderColor: '#2ecc71' },
-                        { label: 'Meta Diária', data: [0], borderColor: '#e74c3c' }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true
-                }
+                type:'line',
+                data:{ labels, datasets:[
+                    { label:'💰 Lucro Líquido', data:lucros, borderColor:'#2ecc71', backgroundColor:'rgba(46,204,113,0.1)', borderWidth:2, pointRadius:3, fill:true },
+                    { label:'🎯 Meta Diária', data:Array(lucros.length).fill(meta), borderColor:'#e74c3c', borderWidth:2, borderDash:[6,6], pointRadius:0, fill:false }
+                ]},
+                options:{ responsive:true, maintainAspectRatio:true, plugins:{ tooltip:{ callbacks:{ label:(ctx)=>`${ctx.dataset.label}: ${formatar(ctx.raw)}` } }, legend:{ position:'bottom', labels:{ font:{ size:9 } } } }, scales:{ y:{ ticks:{ callback:(v)=>formatar(v) } } } }
             });
-            return;
         }
-        
-        const labels = registrosRua.map(r => r.data);
-        const custoFixo = calcularCustoDiario();
-        const dadosLucro = registrosRua.map(r => {
-            const custoTotal = custoFixo + (r.extra || 0);
-            return r.bruto - custoTotal;
-        });
-        const metaLucro = calcularMetaLucroDiario();
-        const linhaMeta = Array(registrosRua.length).fill(metaLucro);
-        
-        chartPerformance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: '💰 Lucro Líquido Diário',
-                        data: dadosLucro,
-                        borderColor: '#2ecc71',
-                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
-                        borderWidth: 3,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#27ae60',
-                        tension: 0.3,
-                        fill: true
-                    },
-                    {
-                        label: '🎯 Meta de Lucro Diário',
-                        data: linhaMeta,
-                        borderColor: '#e74c3c',
-                        borderWidth: 2,
-                        borderDash: [8, 6],
-                        pointRadius: 0,
-                        fill: false
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: (context) => `${context.dataset.label}: ${formatarMoeda(context.raw)}`
-                        }
-                    },
-                    legend: {
-                        position: 'bottom',
-                        labels: { font: { size: 10 } }
-                    }
-                },
-                scales: {
-                    y: {
-                        ticks: {
-                            callback: (value) => formatarMoeda(value)
-                        }
-                    }
-                }
-            }
-        });
-    }
-    
-    function renderizarGraficoResumo() {
-        const ctx = document.getElementById('graficoResumo').getContext('2d');
-        
+
+        const ctx2 = document.getElementById('graficoResumo').getContext('2d');
         if(chartResumo) chartResumo.destroy();
-        
-        const ultimos7Dias = registrosRua.slice(-7);
-        const labels = ultimos7Dias.map(r => r.data);
-        const valores = ultimos7Dias.map(r => r.bruto);
-        
-        chartResumo = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels.length ? labels : ['Sem dados'],
-                datasets: [
-                    {
-                        label: 'Faturamento Bruto',
-                        data: valores.length ? valores : [0],
-                        backgroundColor: '#3498db',
-                        borderRadius: 8
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: (context) => `Faturamento: ${formatarMoeda(context.raw)}`
-                        }
-                    },
-                    legend: { position: 'bottom', labels: { font: { size: 10 } } }
-                },
-                scales: {
-                    y: {
-                        ticks: {
-                            callback: (value) => formatarMoeda(value)
-                        }
-                    }
-                }
-            }
+        const ultimos = registrosRua.slice(-7);
+        chartResumo = new Chart(ctx2, {
+            type:'bar',
+            data:{ labels:ultimos.map(r=>r.data).length?ultimos.map(r=>r.data):['Sem dados'], datasets:[{ label:'Faturamento', data:ultimos.length?ultimos.map(r=>r.bruto):[0], backgroundColor:'#3498db', borderRadius:6 }] },
+            options:{ responsive:true, maintainAspectRatio:true, plugins:{ tooltip:{ callbacks:{ label:(ctx)=>`Faturamento: ${formatar(ctx.raw)}` } } }, scales:{ y:{ ticks:{ callback:(v)=>formatar(v) } } } }
         });
     }
-    
+
     function atualizarAnalises() {
         if(registrosRua.length === 0) {
             document.getElementById('taxaMeta').innerHTML = '0%';
             document.getElementById('progressoMeta').value = 0;
             document.getElementById('melhorDia').innerHTML = 'Nenhum dado';
             document.getElementById('piorDia').innerHTML = 'Nenhum dado';
-            document.getElementById('mediaDiaria').innerHTML = formatarMoeda(0);
+            document.getElementById('mediaDiaria').innerHTML = formatar(0);
             return;
         }
-        
-        const metaLucro = calcularMetaLucroDiario();
-        const custoFixo = calcularCustoDiario();
-        let metasBatidas = 0;
-        
-        const lucros = registrosRua.map(r => {
-            const lucro = r.bruto - (custoFixo + (r.extra || 0));
-            if(lucro >= metaLucro) metasBatidas++;
-            return lucro;
-        });
-        
-        const taxa = (metasBatidas / registrosRua.length) * 100;
+        const meta = metaLucroDiario();
+        const fixo = custoDiario();
+        let batidas = 0;
+        const lucros = registrosRua.map(r => { const l = r.bruto - (fixo + (r.extra||0)); if(l >= meta) batidas++; return l; });
+        const taxa = (batidas / registrosRua.length) * 100;
         document.getElementById('taxaMeta').innerHTML = `${taxa.toFixed(1)}%`;
         document.getElementById('progressoMeta').value = taxa;
-        
-        const melhorLucro = Math.max(...lucros);
-        const piorLucro = Math.min(...lucros);
-        const melhorIndex = lucros.indexOf(melhorLucro);
-        const piorIndex = lucros.indexOf(piorLucro);
-        
-        document.getElementById('melhorDia').innerHTML = `${registrosRua[melhorIndex]?.data || '-'} - ${formatarMoeda(melhorLucro)}`;
-        document.getElementById('piorDia').innerHTML = `${registrosRua[piorIndex]?.data || '-'} - ${formatarMoeda(piorLucro)}`;
-        
-        const mediaLucro = lucros.reduce((a, b) => a + b, 0) / lucros.length;
-        document.getElementById('mediaDiaria').innerHTML = formatarMoeda(mediaLucro);
+        const melhor = Math.max(...lucros);
+        const pior = Math.min(...lucros);
+        const idxMelhor = lucros.indexOf(melhor);
+        const idxPior = lucros.indexOf(pior);
+        document.getElementById('melhorDia').innerHTML = `${registrosRua[idxMelhor]?.data} - ${formatar(melhor)}`;
+        document.getElementById('piorDia').innerHTML = `${registrosRua[idxPior]?.data} - ${formatar(pior)}`;
+        document.getElementById('mediaDiaria').innerHTML = formatar(lucros.reduce((a,b)=>a+b,0)/lucros.length);
     }
-    
-    function excluirRegistro(id) {
-        acaoPendente = () => {
-            registrosRua = registrosRua.filter(r => r.id !== id);
-            localStorage.setItem('giro_registros', JSON.stringify(registrosRua));
-            atualizarTudo();
-            mostrarNotificacao('Registro excluído!', 'success');
-        };
-        mostrarModal('Tem certeza que deseja excluir este registro?');
-    }
-    
-    function excluirDespesa(id) {
-        acaoPendente = () => {
-            despesasPessoais = despesasPessoais.filter(d => d.id !== id);
-            localStorage.setItem('giro_despesas', JSON.stringify(despesasPessoais));
-            atualizarTudo();
-            mostrarNotificacao('Despesa excluída!', 'success');
-        };
-        mostrarModal('Tem certeza que deseja excluir esta despesa?');
-    }
-    
-    function limparHistorico() {
-        acaoPendente = () => {
-            registrosRua = [];
-            localStorage.setItem('giro_registros', JSON.stringify(registrosRua));
-            atualizarTudo();
-            mostrarNotificacao('Histórico limpo!', 'success');
-        };
-        mostrarModal('Tem certeza? Isso apagará TODO o histórico de corridas!');
-    }
-    
-    function limparDespesas() {
-        acaoPendente = () => {
-            despesasPessoais = [];
-            localStorage.setItem('giro_despesas', JSON.stringify(despesasPessoais));
-            atualizarTudo();
-            mostrarNotificacao('Despesas limpas!', 'success');
-        };
-        mostrarModal('Tem certeza? Isso apagará TODAS as despesas!');
-    }
-    
-    function editarRegistro(id) {
-        const registro = registrosRua.find(r => r.id === id);
-        if(registro) {
-            document.getElementById('dataRegistro').value = registro.dataOriginal;
-            document.getElementById('faturamentoBruto').value = registro.bruto;
-            document.getElementById('gastosExtras').value = registro.extra;
-            document.getElementById('obsRegistro').value = registro.obs || '';
-            
-            excluirRegistro(id);
-            mostrarNotificacao('Edite os dados e salve novamente', 'info');
-        }
-    }
-    
-    function editarDespesa(id) {
-        const despesa = despesasPessoais.find(d => d.id === id);
-        if(despesa) {
-            document.getElementById('dataDespesa').value = despesa.dataOriginal;
-            document.getElementById('descDespesa').value = despesa.descricao;
-            document.getElementById('categoriaDespesa').value = despesa.categoria;
-            document.getElementById('valorDespesa').value = despesa.valor;
-            
-            excluirDespesa(id);
-            mostrarNotificacao('Edite os dados e salve novamente', 'info');
-        }
-    }
-    
+
+    function excluirRegistro(id) { acaoPendente = () => { registrosRua = registrosRua.filter(r => r.id !== id); localStorage.setItem('giro_registros', JSON.stringify(registrosRua)); atualizarTudo(); notificar('Excluído!', 'success'); }; mostrarModal('Excluir este registro?'); }
+    function excluirDespesa(id) { acaoPendente = () => { despesasPessoais = despesasPessoais.filter(d => d.id !== id); localStorage.setItem('giro_despesas', JSON.stringify(despesasPessoais)); atualizarTudo(); notificar('Excluído!', 'success'); }; mostrarModal('Excluir esta despesa?'); }
+    function limparHistorico() { acaoPendente = () => { registrosRua = []; localStorage.setItem('giro_registros', JSON.stringify(registrosRua)); atualizarTudo(); notificar('Histórico limpo!', 'success'); }; mostrarModal('Limpar TODO o histórico?'); }
+    function limparDespesas() { acaoPendente = () => { despesasPessoais = []; localStorage.setItem('giro_despesas', JSON.stringify(despesasPessoais)); atualizarTudo(); notificar('Despesas limpas!', 'success'); }; mostrarModal('Limpar TODAS as despesas?'); }
+
     function exportarExcel(tipo) {
-        let dados = [];
-        let nomeArquivo = '';
-        
-        if(tipo === 'corridas') {
-            dados = registrosRua.map(r => ({
-                Data: r.data,
-                'Faturamento Bruto': r.bruto,
-                'Gastos Extras': r.extra,
-                'Observações': r.obs || '',
-                'Data Registro': new Date(r.criadoEm).toLocaleString()
-            }));
-            nomeArquivo = `giro_certo_corridas_${new Date().toISOString().slice(0,10)}.xlsx`;
-        } else if(tipo === 'despesas') {
-            const categorias = {
-                'casa': 'Casa', 'veiculo': 'Veículo', 'pessoal': 'Pessoal',
-                'saude': 'Saúde', 'educacao': 'Educação'
-            };
-            dados = despesasPessoais.map(d => ({
-                Data: d.data,
-                Descrição: d.descricao,
-                Categoria: categorias[d.categoria] || d.categoria,
-                Valor: d.valor,
-                'Data Registro': new Date(d.criadoEm).toLocaleString()
-            }));
-            nomeArquivo = `giro_certo_despesas_${new Date().toISOString().slice(0,10)}.xlsx`;
-        }
-        
-        if(dados.length === 0) {
-            mostrarNotificacao('Sem dados para exportar!', 'error');
-            return;
-        }
-        
+        let dados = [], nome = '';
+        if(tipo === 'corridas') { dados = registrosRua.map(r => ({ Data: r.data, Faturamento: r.bruto, 'Gastos Extras': r.extra, Observações: r.obs })); nome = `corridas_${new Date().toISOString().slice(0,10)}.xlsx`; }
+        else { const cats = { casa:'Casa', veiculo:'Veículo', pessoal:'Pessoal', saude:'Saúde', educacao:'Educação' }; dados = despesasPessoais.map(d => ({ Data: d.data, Descrição: d.descricao, Categoria: cats[d.categoria], Valor: d.valor })); nome = `despesas_${new Date().toISOString().slice(0,10)}.xlsx`; }
+        if(!dados.length) { notificar('Sem dados!', 'error'); return; }
         const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(dados);
-        XLSX.utils.book_append_sheet(wb, ws, 'Dados');
-        XLSX.writeFile(wb, nomeArquivo);
-        mostrarNotificacao('Exportação concluída! 📊', 'success');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dados), 'Dados');
+        XLSX.writeFile(wb, nome);
+        notificar('Exportado!', 'success');
     }
-    
+
     function gerarRelatorioCompleto() {
         const wb = XLSX.utils.book_new();
-        
-        const wsResumo = XLSX.utils.json_to_sheet([{
-            'Data Relatório': new Date().toLocaleDateString(),
-            'Meta Mensal': config.contas,
-            'Dias Trabalhados': config.dias,
-            'Lucro Total': calcularLucroAcumulado(),
-            'Total Despesas': despesasPessoais.reduce((s, d) => s + d.valor, 0),
-            'Saldo Final': calcularLucroAcumulado() - despesasPessoais.reduce((s, d) => s + d.valor, 0)
-        }]);
-        
-        const wsRegistros = XLSX.utils.json_to_sheet(registrosRua.map(r => ({
-            Data: r.data,
-            'Faturamento': r.bruto,
-            'Gastos Extras': r.extra,
-            'Observações': r.obs
-        })));
-        
-        const wsDespesas = XLSX.utils.json_to_sheet(despesasPessoais.map(d => ({
-            Data: d.data,
-            Descrição: d.descricao,
-            Categoria: d.categoria,
-            Valor: d.valor
-        })));
-        
-        XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo');
-        XLSX.utils.book_append_sheet(wb, wsRegistros, 'Corridas');
-        XLSX.utils.book_append_sheet(wb, wsDespesas, 'Despesas');
-        
-        XLSX.writeFile(wb, `relatorio_completo_${new Date().toISOString().slice(0,10)}.xlsx`);
-        mostrarNotificacao('Relatório completo gerado! 📑', 'success');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet([{ Data: new Date().toLocaleDateString(), 'Meta Mensal': config.contas, 'Lucro Total': lucroAcumulado(), 'Total Despesas': despesasPessoais.reduce((s,d)=>s+d.valor,0), 'Saldo Final': lucroAcumulado() - despesasPessoais.reduce((s,d)=>s+d.valor,0) }]), 'Resumo');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(registrosRua), 'Corridas');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(despesasPessoais), 'Despesas');
+        XLSX.writeFile(wb, `relatorio_${new Date().toISOString().slice(0,10)}.xlsx`);
+        notificar('Relatório gerado!', 'success');
     }
-    
+
     function trocarAba(aba) {
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(aba).classList.add('active');
         event.target.classList.add('active');
-        
-        if(aba === 'relatorios') {
-            renderizarGraficoResumo();
-            atualizarAnalises();
-        }
+        if(aba === 'relatorios') { renderizarGraficos(); atualizarAnalises(); }
     }
-    
+
     function atualizarTudo() {
         atualizarKPIs();
-        renderizarTabelaHistorico();
-        renderizarTabelaDespesas();
-        renderizarGraficoPerformance();
-        if(document.getElementById('relatorios').classList.contains('active')) {
-            renderizarGraficoResumo();
-            atualizarAnalises();
-        }
+        renderizarTabelas();
+        renderizarGraficos();
+        if(document.getElementById('relatorios').classList.contains('active')) atualizarAnalises();
     }
-    
-    // Funções auxiliares
-    function formatarMoeda(valor) {
-        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    function formatar(v) { return v.toLocaleString('pt-BR', { style:'currency', currency:'BRL' }); }
+    function notificar(msg, tipo) {
+        const div = document.createElement('div');
+        div.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:${tipo==='success'?'#2ecc71':'#e74c3c'}; color:white; padding:8px 16px; border-radius:30px; z-index:2000; font-size:0.8rem; font-weight:bold; white-space:nowrap;`;
+        div.innerHTML = msg;
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 2500);
     }
-    
-    function mostrarNotificacao(mensagem, tipo) {
-        const notificacao = document.createElement('div');
-        const bgColor = tipo === 'success' ? '#2ecc71' : tipo === 'error' ? '#e74c3c' : '#3498db';
-        notificacao.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: ${bgColor};
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            z-index: 2000;
-            font-size: 0.85rem;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            white-space: nowrap;
-        `;
-        notificacao.innerHTML = mensagem;
-        document.body.appendChild(notificacao);
-        
-        setTimeout(() => {
-            notificacao.remove();
-        }, 2500);
-    }
-    
-    function mostrarModal(mensagem) {
-        document.getElementById('modalMensagem').innerHTML = mensagem;
-        document.getElementById('modalConfirm').style.display = 'flex';
-    }
-    
-    function fecharModal() {
-        document.getElementById('modalConfirm').style.display = 'none';
-        acaoPendente = null;
-    }
-    
-    function confirmarAcao() {
-        if(acaoPendente) {
-            acaoPendente();
-            acaoPendente = null;
-        }
-        fecharModal();
-    }
+    function mostrarModal(msg) { document.getElementById('modalMensagem').innerHTML = msg; document.getElementById('modalConfirm').style.display = 'flex'; }
+    function fecharModal() { document.getElementById('modalConfirm').style.display = 'none'; acaoPendente = null; }
+    function confirmarAcao() { if(acaoPendente) acaoPendente(); fecharModal(); }
 </script>
 </body>
 </html>
