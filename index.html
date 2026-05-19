@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Giro Certo - Gestão Financeira Completa</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -35,66 +35,101 @@
             overflow-x: hidden;
         }
 
-        /* Header aprimorado */
+        /* ===== HEADER CORRIGIDO - CENTRALIZADO E ALINHADO ===== */
         header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 20px 15px 0;
+            padding: 16px 16px 0 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 100;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header-content {
+            text-align: center;
         }
 
         .header-content h1 { 
-            font-size: 1.8rem; 
+            font-size: 1.4rem; 
             font-weight: 800;
             text-align: center;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 0;
+            padding: 0;
+            line-height: 1.3;
         }
 
         .subtitle {
             text-align: center;
-            font-size: 0.8rem;
-            opacity: 0.9;
-            margin-top: 5px;
+            font-size: 0.7rem;
+            opacity: 0.85;
+            margin-top: 4px;
         }
 
         .motivational-box {
-            background: rgba(255,255,255,0.15);
-            border-left: 4px solid var(--success);
-            padding: 10px 15px;
-            margin: 15px auto;
-            border-radius: 8px;
-            max-width: 500px;
-            font-size: 0.85rem;
+            background: rgba(255,255,255,0.12);
+            border-left: 3px solid var(--success);
+            padding: 8px 12px;
+            margin: 10px auto;
+            border-radius: 40px;
+            font-size: 0.7rem;
             text-align: center;
+            display: inline-block;
+            width: auto;
+            max-width: 90%;
             backdrop-filter: blur(5px);
         }
 
-        /* Tabs */
+        /* Tabs corrigidas */
         .tabs {
             display: flex;
-            gap: 5px;
-            margin-top: 15px;
+            gap: 6px;
+            margin-top: 12px;
+            padding: 0 0 12px 0;
+            justify-content: center;
         }
 
         .tab-btn {
-            flex: 1;
+            flex: 0 1 auto;
+            min-width: 100px;
             background: rgba(255,255,255,0.15);
             border: none;
-            padding: 12px;
-            border-radius: 10px 10px 0 0;
+            padding: 10px 16px;
+            border-radius: 30px;
             font-weight: bold;
-            color: rgba(255,255,255,0.8);
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.9);
             cursor: pointer;
             transition: all 0.3s;
+            text-align: center;
         }
 
         .tab-btn.active {
             background: white;
             color: var(--primary);
             box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Responsivo para celular pequeno */
+        @media (max-width: 480px) {
+            .header-content h1 {
+                font-size: 1.2rem;
+            }
+            .subtitle {
+                font-size: 0.65rem;
+            }
+            .motivational-box {
+                font-size: 0.65rem;
+                padding: 6px 10px;
+            }
+            .tab-btn {
+                min-width: 80px;
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
         }
 
         /* Container principal */
@@ -121,14 +156,14 @@
         /* Cards KPI */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
             margin-bottom: 25px;
         }
 
         .kpi-card {
             background: white;
-            padding: 18px;
+            padding: 15px 12px;
             border-radius: 15px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.07);
             text-align: center;
@@ -139,20 +174,20 @@
         .kpi-card:hover { transform: translateY(-3px); }
 
         .kpi-card h3 {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #7f8c8d;
             text-transform: uppercase;
             margin-bottom: 8px;
         }
 
         .kpi-card .value {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: var(--dark);
         }
 
         .kpi-card .trend {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             margin-top: 5px;
         }
 
@@ -171,13 +206,13 @@
         .panel {
             background: white;
             border-radius: 15px;
-            padding: 20px;
+            padding: 18px;
             margin-bottom: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .panel h2 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 18px;
             color: var(--primary);
             border-left: 4px solid var(--primary);
@@ -185,7 +220,7 @@
         }
 
         .panel h3 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             margin: 15px 0 10px;
             color: var(--dark);
         }
@@ -199,7 +234,7 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--dark);
         }
 
@@ -209,7 +244,7 @@
             padding: 10px 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: border-color 0.2s;
         }
 
@@ -267,16 +302,17 @@
         .table-wrapper {
             overflow-x: auto;
             border-radius: 10px;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         th, td {
-            padding: 12px 8px;
+            padding: 10px 8px;
             text-align: left;
             border-bottom: 1px solid #ecf0f1;
         }
@@ -294,6 +330,7 @@
             padding: 5px 8px;
             border-radius: 5px;
             transition: background 0.2s;
+            font-size: 1rem;
         }
 
         .btn-icon:hover {
@@ -303,9 +340,9 @@
         /* Tags de categoria */
         .category-badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: bold;
             color: white;
         }
@@ -313,12 +350,14 @@
         .category-casa { background: var(--info); }
         .category-veiculo { background: var(--warning); color: #333; }
         .category-pessoal { background: #9b59b6; }
+        .category-saude { background: #e74c3c; }
+        .category-educacao { background: #1abc9c; }
 
         /* Gráfico - CORREÇÃO DO BUG */
         .chart-container {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 280px;
             margin: 15px 0;
         }
 
@@ -350,21 +389,9 @@
             background: white;
             padding: 25px;
             border-radius: 15px;
-            max-width: 400px;
+            max-width: 350px;
             width: 90%;
-        }
-
-        /* Loading */
-        .loading {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 1001;
+            text-align: center;
         }
     </style>
 </head>
@@ -582,20 +609,20 @@
                     <div id="analises">
                         <div style="margin-bottom: 20px;">
                             <h3>🎯 Taxa de Atingimento de Metas</h3>
-                            <div id="taxaMeta" style="font-size: 2rem; font-weight: bold;"></div>
-                            <progress id="progressoMeta" value="0" max="100" style="width: 100%; height: 20px;"></progress>
+                            <div id="taxaMeta" style="font-size: 1.8rem; font-weight: bold;"></div>
+                            <progress id="progressoMeta" value="0" max="100" style="width: 100%; height: 20px; border-radius: 10px;"></progress>
                         </div>
                         <div style="margin-bottom: 20px;">
                             <h3>📈 Melhor Dia</h3>
-                            <div id="melhorDia" class="value"></div>
+                            <div id="melhorDia" class="value" style="font-size: 1rem;"></div>
                         </div>
                         <div style="margin-bottom: 20px;">
                             <h3>📉 Pior Dia</h3>
-                            <div id="piorDia" class="value"></div>
+                            <div id="piorDia" class="value" style="font-size: 1rem;"></div>
                         </div>
                         <div>
                             <h3>⚡ Média Diária</h3>
-                            <div id="mediaDiaria" class="value"></div>
+                            <div id="mediaDiaria" class="value" style="font-size: 1.2rem;"></div>
                         </div>
                     </div>
                 </div>
@@ -619,7 +646,7 @@
 <div id="modalConfirm" class="modal">
     <div class="modal-content">
         <h3>Confirmar ação</h3>
-        <p id="modalMensagem"></p>
+        <p id="modalMensagem" style="margin-top: 15px;"></p>
         <div class="btn-group" style="margin-top: 20px;">
             <button class="btn btn-primary" onclick="confirmarAcao()">Sim</button>
             <button class="btn btn-danger" onclick="fecharModal()">Cancelar</button>
@@ -721,7 +748,6 @@
             criadoEm: new Date().toISOString()
         });
         
-        // Ordenar por data
         registrosRua.sort((a, b) => {
             return new Date(a.dataOriginal) - new Date(b.dataOriginal);
         });
@@ -834,7 +860,7 @@
         const custoFixo = calcularCustoDiario();
         const metaLucro = calcularMetaLucroDiario();
         
-        registrosRua.slice().reverse().forEach(reg => {
+        [...registrosRua].reverse().forEach(reg => {
             const custoTotal = custoFixo + (reg.extra || 0);
             const lucro = reg.bruto - custoTotal;
             const diferenca = lucro - metaLucro;
@@ -873,7 +899,7 @@
             'educacao': '📚 Educação'
         };
         
-        despesasPessoais.slice().reverse().forEach(desp => {
+        [...despesasPessoais].reverse().forEach(desp => {
             tbody.innerHTML += `
                 <tr>
                     <td>${desp.data}</td>
@@ -958,7 +984,8 @@
                         }
                     },
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: { font: { size: 10 } }
                     }
                 },
                 scales: {
@@ -1002,7 +1029,8 @@
                         callbacks: {
                             label: (context) => `Faturamento: ${formatarMoeda(context.raw)}`
                         }
-                    }
+                    },
+                    legend: { position: 'bottom', labels: { font: { size: 10 } } }
                 },
                 scales: {
                     y: {
@@ -1158,32 +1186,34 @@
     }
     
     function gerarRelatorioCompleto() {
-        const relatorio = {
-            periodo: new Date().toLocaleDateString(),
-            configuracoes: config,
-            totalRegistros: registrosRua.length,
-            lucroTotal: calcularLucroAcumulado(),
-            totalDespesas: despesasPessoais.reduce((s, d) => s + d.valor, 0),
-            saldoFinal: calcularLucroAcumulado() - despesasPessoais.reduce((s, d) => s + d.valor, 0),
-            registros: registrosRua,
-            despesas: despesasPessoais
-        };
-        
         const wb = XLSX.utils.book_new();
-        const wsConfig = XLSX.utils.json_to_sheet([relatorio.configuracoes]);
-        const wsRegistros = XLSX.utils.json_to_sheet(relatorio.registros);
-        const wsDespesas = XLSX.utils.json_to_sheet(relatorio.despesas);
+        
         const wsResumo = XLSX.utils.json_to_sheet([{
-            'Lucro Total': relatorio.lucroTotal,
-            'Total Despesas': relatorio.totalDespesas,
-            'Saldo Final': relatorio.saldoFinal,
-            'Dias Trabalhados': relatorio.totalRegistros
+            'Data Relatório': new Date().toLocaleDateString(),
+            'Meta Mensal': config.contas,
+            'Dias Trabalhados': config.dias,
+            'Lucro Total': calcularLucroAcumulado(),
+            'Total Despesas': despesasPessoais.reduce((s, d) => s + d.valor, 0),
+            'Saldo Final': calcularLucroAcumulado() - despesasPessoais.reduce((s, d) => s + d.valor, 0)
         }]);
+        
+        const wsRegistros = XLSX.utils.json_to_sheet(registrosRua.map(r => ({
+            Data: r.data,
+            'Faturamento': r.bruto,
+            'Gastos Extras': r.extra,
+            'Observações': r.obs
+        })));
+        
+        const wsDespesas = XLSX.utils.json_to_sheet(despesasPessoais.map(d => ({
+            Data: d.data,
+            Descrição: d.descricao,
+            Categoria: d.categoria,
+            Valor: d.valor
+        })));
         
         XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo');
         XLSX.utils.book_append_sheet(wb, wsRegistros, 'Corridas');
         XLSX.utils.book_append_sheet(wb, wsDespesas, 'Despesas');
-        XLSX.utils.book_append_sheet(wb, wsConfig, 'Configuracoes');
         
         XLSX.writeFile(wb, `relatorio_completo_${new Date().toISOString().slice(0,10)}.xlsx`);
         mostrarNotificacao('Relatório completo gerado! 📑', 'success');
@@ -1207,7 +1237,10 @@
         renderizarTabelaHistorico();
         renderizarTabelaDespesas();
         renderizarGraficoPerformance();
-        atualizarAnalises();
+        if(document.getElementById('relatorios').classList.contains('active')) {
+            renderizarGraficoResumo();
+            atualizarAnalises();
+        }
     }
     
     // Funções auxiliares
@@ -1217,25 +1250,28 @@
     
     function mostrarNotificacao(mensagem, tipo) {
         const notificacao = document.createElement('div');
+        const bgColor = tipo === 'success' ? '#2ecc71' : tipo === 'error' ? '#e74c3c' : '#3498db';
         notificacao.style.cssText = `
             position: fixed;
             bottom: 20px;
-            right: 20px;
-            background: ${tipo === 'success' ? '#2ecc71' : tipo === 'error' ? '#e74c3c' : '#3498db'};
+            left: 50%;
+            transform: translateX(-50%);
+            background: ${bgColor};
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 30px;
             z-index: 2000;
-            animation: slideIn 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: bold;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            white-space: nowrap;
         `;
         notificacao.innerHTML = mensagem;
         document.body.appendChild(notificacao);
         
         setTimeout(() => {
-            notificacao.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notificacao.remove(), 300);
-        }, 3000);
+            notificacao.remove();
+        }, 2500);
     }
     
     function mostrarModal(mensagem) {
@@ -1255,20 +1291,6 @@
         }
         fecharModal();
     }
-    
-    // Adicionar estilos de animação
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
 </script>
 </body>
 </html>
