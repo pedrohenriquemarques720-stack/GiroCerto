@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Financeira - Motoboy Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #1f4e78;
+            --primary-light: #d9e1f2;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f1c40f;
+            --excel: #27ae60;
+            --border: #dcdde1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body { background-color: #f1f2f6; color: var(--dark); padding: 0; }
+
+        /* HEADER E NAVEGAÇÃO (ABAS) */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 20px 0 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-content { text-align: center; margin-bottom: 20px; }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px 10px 0 0;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            width: auto;
+            margin: 0;
+        }
+
+        .tab-btn.active {
+            background-color: #f1f2f6;
+            color: var(--primary);
+        }
+
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+
+        /* CONTROLE DE EXIBIÇÃO DAS ABAS */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* COMPONENTES GERAIS */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .kpi-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid var(--primary); }
+        .kpi-card.success { border-bottom-color: var(--success); }
+        .kpi-card.danger { border-bottom-color: var(--danger); }
+        .kpi-card.warning { border-bottom-color: var(--warning); }
+        .kpi-card h3 { font-size: 0.9rem; color: #7f8c8d; text-transform: uppercase; margin-bottom: 10px; }
+        .kpi-card p { font-size: 1.8rem; font-weight: bold; color: var(--dark); }
+
+        .main-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media(min-width: 900px) { .main-layout { grid-template-columns: 1fr 2fr; } }
+        
+        /* Layout específico para contabilidade (meio a meio) */
+        @media(min-width: 900px) { .main-layout.half { grid-template-columns: 1fr 1fr; } }
+
+        .panel { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .panel h2 { font-size: 1.2rem; margin-bottom: 15px; color: var(--primary); border-left: 4px solid var(--primary); padding-left: 8px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; font-size: 1rem; }
+
+        button { width: 100%; padding: 12px; background-color: var(--primary); color: white; border: none; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; margin-bottom: 10px; }
+        button:hover { background-color: #153654; }
+        button.btn-danger { background-color: var(--danger); }
+        button.btn-excel { background-color: var(--excel); }
+        
+        .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        @media(max-width: 600px) { .action-buttons { grid-template-columns: 1fr; } }
+
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.95rem; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: var(--light); font-weight: bold; }
+        tr:nth-child(even) { background-color: #fafdff; }
+
+        .text-success { color: var(--success); font-weight: bold; }
+        .text-danger { color: var(--danger); font-weight: bold; }
+        .btn-del { background: none; color: var(--danger); border: none; cursor: pointer; font-weight: bold; padding: 5px; margin: 0; width: auto; }
+        
+        /* Categoria tags */
+        .tag { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: white; }
+        .tag-casa { background-color: #3498db; }
+        .tag-veiculo { background-color: #e67e22; }
+        .tag-pessoal { background-color: #9b59b6; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1>Gestão Financeira Motoboy</h1>
+            <p>Seu negócio e sua vida pessoal em um só lugar</p>
+        </div>
+        <!-- BOTÕES DE NAVEGAÇÃO -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="mudarAba('dashboard')">🏍️ Dashboard da Rua</button>
+            <button class="tab-btn" onclick="mudarAba('contabilidade')">🏠 Contabilidade Pessoal</button>
+        </div>
+    </header>
+
+<div class="container">
+    
+    <!-- ========================================== -->
+    <!-- ABA 1: DASHBOARD DA RUA                    -->
+    <!-- ========================================== -->
+    <div id="aba-dashboard" class="tab-content active">
+        <!-- Indicadores Rápidos -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <h3>Meta Fixa Mensal</h3>
+                <p id="kpi-meta-mensal">R$ 4.198,00</p>
+            </div>
+            <div class="kpi-card danger">
+                <h3>Custo Diário (Rua)</h3>
+                <p id="kpi-custo-diario">R$ 80,00</p>
+            </div>
+            <div class="kpi-card">
+                <h3>Faturamento Bruto Alvo</h3>
+                <p id="kpi-faturamento-alvo">R$ 241,46</p>
+            </div>
+            <div class="kpi-card success">
+                <h3>Acumulado (Lucro Limpo)</h3>
+                <p id="kpi-acumulado">R$ 0,00</p>
+            </div>
+        </div>
+
+        <div class="main-layout">
+            <!-- Coluna da Esquerda -->
+            <div>
+                <div class="panel">
+                    <h2>1. Configuração de Custos da Rua</h2>
+                    <div class="form-group">
+                        <label>Contas Fixas do Mês (Sua Meta)</label>
+                        <input type="number" id="cfg-contas" value="4198">
+                    </div>
+                    <div class="form-group">
+                        <label>Dias de Trabalho no Mês</label>
+                        <input type="number" id="cfg-dias" value="26">
+                    </div>
+                    <div class="form-group">
+                        <label>Gasto Diário Moto (R$)</label>
+                        <input type="number" id="cfg-moto" value="20">
+                    </div>
+                    <div class="form-group">
+                        <label>Gasto Diário Carro (R$)</label>
+                        <input type="number" id="cfg-carro" value="60">
+                    </div>
+                    <button onclick="salvarConfiguracoes()">Atualizar Parâmetros</button>
+                </div>
+
+                <div class="panel">
+                    <h2>2. Apontamento do Dia (Rua)</h2>
+                    <form id="form-registro">
+                        <div class="form-group">
+                            <label>Data</label>
+                            <input type="date" id="reg-data" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Faturamento Bruto do Dia (R$)</label>
+                            <input type="number" step="0.01" id="reg-bruto" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gastos Extras na Rua (Pneu, Óleo)</label>
+                            <input type="number" step="0.01" id="reg-extra" value="0">
+                        </div>
+                        <button type="submit">Salvar Dia</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Coluna da Direita -->
+            <div>
+                <div class="panel">
+                    <h2>Desempenho vs Meta Diária</h2>
+                    <canvas id="chartPerformance" style="width:100%; height:250px;"></canvas>
+                </div>
+
+                <div class="panel">
+                    <h2>Histórico de Corridas</h2>
+                    <div class="table-container">
+                        <table id="tabela-registros">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Faturamento</th>
+                                    <th>Custos</th>
+                                    <th>Lucro Líquido</th>
+                                    <th>Saldo Meta</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-excel" onclick="exportarExcelRua()">📊 Excel da Rua</button>
+                        <button class="btn-danger" onclick="limparDadosRua()">🗑️ Zerar Rua</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ABA 2: CONTABILIDADE PESSOAL               -->
+    <!-- ========================================== -->
+    <div id="aba-contabilidade" class="tab-content">
+        
+        <!-- Saldo Geral -->
+        <div class="kpi-grid">
+            <div class="kpi-card success">
+                <h3>Saldo Transferido da Rua</h3>
+                <p id="kpi-conta-receita">R$ 0,00</p>
+                <small>Isso é o seu Lucro Limpo Acumulado</small>
+            </div>
+            <div class="kpi-card danger">
+                <h3>Total de Despesas Pagas</h3>
+                <p id="kpi-conta-despesas">R$ 0,00</p>
+                <small>Contas já quitadas no mês</small>
+            </div>
+            <div class="kpi-card warning">
+                <h3>Dinheiro Livre (Caixa)</h3>
+                <p id="kpi-conta-livre">R$ 0,00</p>
+                <small>O que sobrou no seu bolso</small>
+            </div>
+        </div>
+
+        <div class="main-layout half">
+            <!-- Lançar Despesa -->
+            <div class="panel">
+                <h2>Pagar uma Conta (Despesa Pessoal)</h2>
+                <form id="form-despesa">
+                    <div class="form-group">
+                        <label>Data de Pagamento</label>
+                        <input type="date" id="desp-data" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição (Ex: Financiamento Carro)</label>
+                        <input type="text" id="desp-desc" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="desp-cat">
+                            <option value="veiculo">Parcelas Veículo</option>
+                            <option value="casa">Contas da Casa (Água, Luz, Aluguel)</option>
+                            <option value="pessoal">Gastos Pessoais / Lazer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$)</label>
+                        <input type="number" step="0.01" id="desp-valor" required>
+                    </div>
+                    <button type="submit">Registrar Pagamento</button>
+                </form>
+            </div>
+
+            <!-- Lista de Despesas -->
+            <div class="panel">
+                <h2>Extrato de Pagamentos</h2>
+                <div class="table-container">
+                    <table id="tabela-despesas">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Valor</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-excel" onclick="exportarExcelContabilidade()">📊 Excel Contabilidade</button>
+                    <button class="btn-danger" onclick="limparDadosContabilidade()">🗑️ Zerar Contas</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ======= GERENCIAMENTO DE ABAS =======
+    function mudarAba(abaId) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        
+        if(abaId === 'dashboard') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('aba-dashboard').classList.add('active');
+        } else {
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            document.getElementById('aba-contabilidade').classList.add('active');
+        }
+    }
+
+    // ======= BANCOS DE DADOS (LOCALSTORAGE) =======
+    let config = JSON.parse(localStorage.getItem('moto_config')) || { contas: 4198, dias: 26, moto: 20, carro: 60 };
+    let registrosRua = JSON.parse(localStorage.getItem('moto_registros')) || [];
+    let despesasPessoais = JSON.parse(localStorage.getItem('moto_despesas')) || [];
+    
+    let chartInstance = null;
+    let lucroLiquidoAcumuladoGlobal = 0; // Variável ponte entre as duas abas
+
+    // Iniciar datas nos forms
+    document.getElementById('reg-data').valueAsDate = new Date();
+    document.getElementById('desp-data').valueAsDate = new Date();
+
+    function formatarMoeda(valor) { return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+
+    // ======= FUNÇÕES DA RUA (DASHBOARD) =======
+    function atualizarCalculosRua() {
+        const custoFixo = config.moto + config.carro;
+        const metaLiq = config.contas / config.dias;
+        
+        document.getElementById('kpi-meta-mensal').innerText = formatarMoeda(config.contas);
+        document.getElementById('kpi-custo-diario').innerText = formatarMoeda(custoFixo);
+        document.getElementById('kpi-faturamento-alvo').innerText = formatarMoeda(metaLiq + custoFixo);
+        
+        document.getElementById('cfg-contas').value = config.contas;
+        document.getElementById('cfg-dias').value = config.dias;
+        document.getElementById('cfg-moto').value = config.moto;
+        document.getElementById('cfg-carro').value = config.carro;
+
+        renderizarTabelaRua(metaLiq, custoFixo);
+        renderizarGrafico(metaLiq);
+        
+        // Sempre que a rua atualiza, o dinheiro da contabilidade também atualiza
+        atualizarCalculosContabilidade(); 
+    }
+
+    function salvarConfiguracoes() {
+        config.contas = parseFloat(document.getElementById('cfg-contas').value) || 0;
+        config.dias = parseInt(document.getElementById('cfg-dias').value) || 1;
+        config.moto = parseFloat(document.getElementById('cfg-moto').value) || 0;
+        config.carro = parseFloat(document.getElementById('cfg-carro').value) || 0;
+        localStorage.setItem('moto_config', JSON.stringify(config));
+        atualizarCalculosRua();
+    }
+
+    document.getElementById('form-registro').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const [ano, mes, dia] = document.getElementById('reg-data').value.split('-');
+        registrosRua.push({
+            id: Date.now(),
+            data: `${dia}/${mes}/${ano}`,
+            bruto: parseFloat(document.getElementById('reg-bruto').value) || 0,
+            extra: parseFloat(document.getElementById('reg-extra').value) || 0
+        });
+        registrosRua.sort((a, b) => new Date(a.id) - new Date(b.id));
+        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
+        document.getElementById('reg-bruto').value = '';
+        document.getElementById('reg-extra').value = '0';
+        atualizarCalculosRua();
+    });
+
+    function excluirRegistroRua(id) {
+        registrosRua = registrosRua.filter(r => r.id !== id);
+        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
+        atualizarCalculosRua();
+    }
+
+    function limparDadosRua() {
+        if(confirm("Zerar as corridas da rua?")) {
+            registrosRua = [];
+            localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
+            atualizarCalculosRua();
+        }
+    }
+
+    function renderizarTabelaRua(metaLiq, custoFixo) {
+        const tbody = document.querySelector('#tabela-registros tbody');
+        tbody.innerHTML = '';
+        lucroLiquidoAcumuladoGlobal = 0; // Zera a ponte para recalcular
+
+        registrosRua.forEach(r => {
+            const custoTotal = custoFixo + r.extra;
+            const lucro = r.bruto - custoTotal;
+            lucroLiquidoAcumuladoGlobal += lucro; // Soma o dinheiro "limpo" da rua
+            const saldo = lucro - metaLiq;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${r.data}</td>
+                    <td>${formatarMoeda(r.bruto)}</td>
+                    <td>${formatarMoeda(custoTotal)}</td>
+                    <td>${formatarMoeda(lucro)}</td>
+                    <td class="${saldo >= 0 ? 'text-success' : 'text-danger'}">${saldo >= 0 ? '+' : ''}${formatarMoeda(saldo)}</td>
+                    <td><button class="btn-del" onclick="excluirRegistroRua(${r.id})">❌</button></td>
+                </tr>`;
+        });
+        document.getElementById('kpi-acumulado').innerText = formatarMoeda(lucroLiquidoAcumuladoGlobal);
+    }
+
+    // ======= FUNÇÕES DA CONTABILIDADE =======
+    function atualizarCalculosContabilidade() {
+        // A Receita da contabilidade é exatamente o lucro limpo calculado na aba da rua
+        document.getElementById('kpi-conta-receita').innerText = formatarMoeda(lucroLiquidoAcumuladoGlobal);
+        
+        let totalDespesas = 0;
+        const tbody = document.querySelector('#tabela-despesas tbody');
+        tbody.innerHTML = '';
+
+        despesasPessoais.forEach(d => {
+            totalDespesas += d.valor;
+            let tagClass = d.cat === 'casa' ? 'tag-casa' : (d.cat === 'veiculo' ? 'tag-veiculo' : 'tag-pessoal');
+            let nomeCat = d.cat === 'casa' ? 'Casa' : (d.cat === 'veiculo' ? 'Veículo' : 'Pessoal');
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${d.data}</td>
+                    <td>${d.desc}</td>
+                    <td><span class="tag ${tagClass}">${nomeCat}</span></td>
+                    <td class="text-danger">-${formatarMoeda(d.valor)}</td>
+                    <td><button class="btn-del" onclick="excluirDespesa(${d.id})">❌</button></td>
+                </tr>`;
+        });
+
+        document.getElementById('kpi-conta-despesas').innerText = formatarMoeda(totalDespesas);
+        
+        // Caixa Livre (Receita da Rua menos as Contas Pagas)
+        const caixaLivre = lucroLiquidoAcumuladoGlobal - totalDespesas;
+        const elmCaixa = document.getElementById('kpi-conta-livre');
+        elmCaixa.innerText = formatarMoeda(caixaLivre);
+        elmCaixa.style.color = caixaLivre >= 0 ? 'var(--success)' : 'var(--danger)';
+    }
+
+    document.getElementById('form-despesa').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const [ano, mes, dia] = document.getElementById('desp-data').value.split('-');
+        despesasPessoais.push({
+            id: Date.now(),
+            data: `${dia}/${mes}/${ano}`,
+            desc: document.getElementById('desp-desc').value,
+            cat: document.getElementById('desp-cat').value,
+            valor: parseFloat(document.getElementById('desp-valor').value) || 0
+        });
+        despesasPessoais.sort((a, b) => new Date(a.id) - new Date(b.id));
+        localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
+        
+        document.getElementById('desp-desc').value = '';
+        document.getElementById('desp-valor').value = '';
+        atualizarCalculosContabilidade();
+    });
+
+    function excluirDespesa(id) {
+        despesasPessoais = despesasPessoais.filter(d => d.id !== id);
+        localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
+        atualizarCalculosContabilidade();
+    }
+
+    function limparDadosContabilidade() {
+        if(confirm("Deseja apagar todas as contas registradas?")) {
+            despesasPessoais = [];
+            localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
+            atualizarCalculosContabilidade();
+        }
+    }
+
+    // ======= GRÁFICOS E EXPORTAÇÃO =======
+    function renderizarGrafico(metaLiq) {
+        const ctx = document.getElementById('chartPerformance').getContext('2d');
+        if (chartInstance) chartInstance.destroy();
+        if (registrosRua.length === 0) return;
+
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: registrosRua.map(r => r.data),
+                datasets: [
+                    { label: 'Lucro Líquido Real', data: registrosRua.map(r => r.bruto - (config.moto + config.carro + r.extra)), borderColor: '#2ecc71', backgroundColor: 'rgba(46, 204, 113, 0.1)', fill: true },
+                    { label: 'Meta Líquida', data: Array(registrosRua.length).fill(metaLiq), borderColor: '#e74c3c', borderDash: [5, 5], fill: false }
+                ]
+            }
+        });
+    }
+
+    function exportarExcelRua() {
+        // (Código original simplificado de exportação)
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(registrosRua);
+        XLSX.utils.book_append_sheet(wb, ws, "Corridas");
+        XLSX.writeFile(wb, `Corridas_Motoboy.xlsx`);
+    }
+
+    function exportarExcelContabilidade() {
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(despesasPessoais);
+        XLSX.utils.book_append_sheet(wb, ws, "Despesas");
+        XLSX.writeFile(wb, `Contas_Motoboy.xlsx`);
+    }
+
+    // Inicia a aplicação
+    atualizarCalculosRua(); // Este já chama o atualizarCalculosContabilidade()
+</script>
+</body>
+</html>
