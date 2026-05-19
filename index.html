@@ -1,1191 +1,673 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Giro Certo - Gestão Financeira</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-    
-
     <style>
-
-        :root {
-
-            --primary: #1f4e78;
-
-            --primary-light: #d9e1f2;
-
-            --dark: #2c3e50;
-
-            --light: #f8f9fa;
-
-            --success: #2ecc71;
-
-            --danger: #e74c3c;
-
-            --warning: #f1c40f;
-
-            --excel: #27ae60;
-
-            --border: #dcdde1;
-
-        }
-
-
-
-        * { 
-
-            box-sizing: border-box; 
-
-            margin: 0; 
-
-            padding: 0; 
-
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-
-        }
-
-
-
-        body { 
-
-            background-color: #f1f2f6; 
-
-            color: var(--dark); 
-
+        * {
+            margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-            width: 100%;
-
+        body {
+            background: #f4f7fc;
+            font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
             overflow-x: hidden;
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-        }
-
-
-
-        header {
-
-            background: linear-gradient(135deg, #1f4e78 0%, #0f2a42 100%);
-
-            color: white;
-
-            padding: 20px 15px 0 15px;
-
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-
             width: 100%;
-
-            text-align: center;
-
-            position: relative;
-
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        /* HEADER FIXO E COMPACTO */
+        header {
+            background: linear-gradient(135deg, #0b3b4f 0%, #1a5f7a 100%);
+            color: white;
+            width: 100%;
+            padding: 16px 12px 0 12px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 20px 20px;
+        }
 
-
-        .header-content h1 { 
-
-            font-size: 1.8rem; 
-
+        .header-content h1 {
+            font-size: 1.7rem;
             font-weight: 800;
-
             letter-spacing: 1px;
-
-            text-transform: uppercase;
-
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-
-            margin-bottom: 2px;
-
+            text-align: center;
         }
-
-        
 
         .motivational-box {
-
-            background: rgba(255, 255, 255, 0.1);
-
-            border-left: 4px solid var(--success);
-
+            background: rgba(255, 255, 255, 0.12);
+            border-left: 4px solid #ffd966;
             padding: 8px 12px;
-
-            margin: 10px auto 15px auto;
-
-            border-radius: 4px;
-
-            max-width: 500px;
-
-            font-style: italic;
-
-            font-size: 0.85rem;
-
-            color: #e2e8f0;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 8px;
-
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
-
+            margin: 10px auto 12px auto;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+            max-width: 90%;
+            backdrop-filter: blur(2px);
         }
-
-        
 
         .tabs {
-
             display: flex;
-
-            justify-content: center;
-
             gap: 8px;
-
-            width: 100%;
-
+            justify-content: center;
+            margin-top: 6px;
         }
-
-
 
         .tab-btn {
-
-            background-color: rgba(255,255,255,0.15);
-
+            background: rgba(255, 255, 255, 0.2);
             border: none;
-
-            color: rgba(255, 255, 255, 0.8);
-
-            padding: 12px 10px;
-
-            border-radius: 8px 8px 0 0;
-
-            font-size: 0.9rem;
-
+            padding: 10px 18px;
+            border-radius: 40px 40px 0 0;
             font-weight: bold;
-
+            font-size: 0.85rem;
+            color: #eef4ff;
             cursor: pointer;
-
-            transition: 0.3s;
-
+            transition: 0.2s;
             flex: 1;
-
-            max-width: 200px;
-
+            max-width: 170px;
         }
-
-
 
         .tab-btn.active {
-
-            background-color: #f1f2f6;
-
-            color: var(--primary);
-
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-
+            background: #f4f7fc;
+            color: #0b3b4f;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
         }
 
-
-
-        .container { 
-
-            width: 100%; 
-
-            max-width: 1200px; 
-
-            padding: 12px;
-
+        .container {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 12px 14px 20px 14px;
         }
 
+        .tab-content {
+            display: none;
+            width: 100%;
+            animation: fade 0.2s ease;
+        }
 
+        .tab-content.active {
+            display: block;
+        }
 
-        .tab-content { width: 100%; display: none; }
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(6px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
 
-        .tab-content.active { display: block; animation: fadeIn 0.3s; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-
-
-        .kpi-grid { 
-
-            display: grid; 
-
+        /* KPI cards responsivos */
+        .kpi-grid {
+            display: grid;
             grid-template-columns: repeat(2, 1fr);
-
-            gap: 12px; 
-
-            margin-bottom: 15px; 
-
-            width: 100%;
-
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
-        
-
-        .kpi-card { 
-
-            background: white; 
-
-            padding: 15px 10px; 
-
-            border-radius: 8px; 
-
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-
-            text-align: center; 
-
-            border-bottom: 4px solid var(--primary);
-
-            width: 100%;
-
+        .kpi-card {
+            background: white;
+            padding: 14px 6px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.03);
+            border-bottom: 3px solid #2c7da0;
+            transition: all 0.1s;
         }
 
-        .kpi-card.success { border-bottom-color: var(--success); }
+        .kpi-card.success { border-bottom-color: #2ecc71; }
+        .kpi-card.danger { border-bottom-color: #e74c3c; }
+        .kpi-card.warning { border-bottom-color: #f39c12; }
 
-        .kpi-card.danger { border-bottom-color: var(--danger); }
+        .kpi-card h3 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #5d6e7e;
+            letter-spacing: 0.5px;
+        }
 
-        .kpi-card.warning { border-bottom-color: var(--warning); }
+        .kpi-card p {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin: 6px 0 2px;
+            color: #1f2e3a;
+        }
 
-        
+        .kpi-card small {
+            font-size: 0.65rem;
+            color: #7f8c8d;
+        }
 
-        .kpi-card h3 { font-size: 0.75rem; color: #7f8c8d; text-transform: uppercase; margin-bottom: 5px; }
+        /* painéis sem overflow lateral */
+        .panel {
+            background: white;
+            border-radius: 24px;
+            padding: 18px 16px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            width: 100%;
+        }
 
-        .kpi-card p { font-size: 1.2rem; font-weight: bold; color: var(--dark); }
+        .panel h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e5f74;
+            border-left: 5px solid #2c7da0;
+            padding-left: 12px;
+            margin-bottom: 16px;
+        }
 
-        .kpi-card small { font-size: 0.7rem; display: block; margin-top: 4px; color: #7f8c8d; }
+        .form-group {
+            margin-bottom: 14px;
+        }
 
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
 
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d4dee5;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            background: white;
+            transition: 0.2s;
+        }
 
-        .main-layout { 
+        button {
+            width: 100%;
+            background: #1f6e8c;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
+        button:active { transform: scale(0.97); background: #0e4b62;}
+
+        .btn-danger { background: #c44536; }
+        .btn-excel { background: #2a6b47; }
+
+        .action-buttons {
             display: flex;
-
-            flex-direction: column;
-
-            gap: 15px; 
-
-            width: 100%; 
-
+            gap: 12px;
+            margin-top: 16px;
         }
 
-        
-
-        .panel { 
-
-            background: white; 
-
-            padding: 15px; 
-
-            border-radius: 8px; 
-
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-
+        .table-container {
             width: 100%;
-
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 20px;
         }
 
-        .panel h2 { font-size: 1.1rem; margin-bottom: 12px; color: var(--primary); border-left: 4px solid var(--primary); padding-left: 8px; }
-
-
-
-        .form-group { margin-bottom: 12px; width: 100%; }
-
-        .form-group label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.85rem; }
-
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; font-size: 1rem; }
-
-
-
-        button { width: 100%; padding: 12px; background-color: var(--primary); color: white; border: none; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; margin-bottom: 10px; }
-
-        button.btn-danger { background-color: var(--danger); }
-
-        button.btn-excel { background-color: var(--excel); }
-
-        
-
-        .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; width: 100%; }
-
-
-
-        .table-container { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; min-width: 450px; }
-
-        th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
-
-        th { background-color: var(--light); font-weight: bold; }
-
-
-
-        .text-success { color: var(--success); font-weight: bold; }
-
-        .text-danger { color: var(--danger); font-weight: bold; }
-
-        .btn-del { background: none; color: var(--danger); border: none; cursor: pointer; font-weight: bold; padding: 5px; width: auto; margin: 0; }
-
-        
-
-        .tag { padding: 3px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; color: white; }
-
-        .tag-casa { background-color: #3498db; }
-
-        .tag-veiculo { background-color: #e67e22; }
-
-        .tag-pessoal { background-color: #9b59b6; }
-
-
-
-        @media(min-width: 768px) {
-
-            .header-content h1 { font-size: 2.2rem; }
-
-            .kpi-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-
-            .kpi-card p { font-size: 1.6rem; }
-
-            .kpi-card h3 { font-size: 0.85rem; }
-
-            .main-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-
-            .main-layout.half { grid-template-columns: 1fr 1fr; }
-
-            table { font-size: 0.95rem; min-width: 100%; }
-
+        table {
+            width: 100%;
+            min-width: 460px;
+            border-collapse: collapse;
+            font-size: 0.8rem;
         }
 
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #eef2f5;
+            font-weight: 700;
+            color: #2b4f6e;
+        }
+
+        .text-success { color: #27ae60; font-weight: 700; }
+        .text-danger { color: #e74c3c; font-weight: 700; }
+
+        .btn-del {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            width: auto;
+            color: #c0392b;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .tag-casa { background: #2980b9; }
+        .tag-veiculo { background: #e67e22; }
+        .tag-pessoal { background: #8e44ad; }
+
+        /* GRAFICO AJUSTADO: ALTURA FIXA E SEM EXPANSÃO */
+        .chart-wrapper {
+            width: 100%;
+            height: 220px;
+            position: relative;
+            margin: 8px 0 4px 0;
+        }
+
+        canvas {
+            max-height: 100%;
+            width: 100%;
+        }
+
+        /* Responsivo tablet+ */
+        @media (min-width: 640px) {
+            .kpi-grid {
+                grid-template-columns: repeat(4,1fr);
+            }
+            .main-layout {
+                display: grid;
+                grid-template-columns: 1fr 1.2fr;
+                gap: 18px;
+            }
+            .container {
+                max-width: 1100px;
+            }
+        }
     </style>
-
 </head>
-
 <body>
 
-
-
-    <header>
-
-        <div class="header-content">
-
-            <h1>🏁 Giro Certo 🏍️</h1>
-
-            <div class="motivational-box" id="frase-motivacional">
-
-                ⚡ 🧠 "Mente firme, piloto seguro. A meta do dia te espera!"
-
-            </div>
-
+<header>
+    <div class="header-content">
+        <h1>🏁 GIRO CERTO 🏍️</h1>
+        <div class="motivational-box" id="frase-motivacional">
+            💪 "Foco, segurança e entrega: cada dia é uma nova meta!"
         </div>
-
-        <div class="tabs">
-
-            <button class="tab-btn active" onclick="mudarAba('dashboard')">🏍️ Painel da Rua</button>
-
-            <button class="tab-btn" onclick="mudarAba('contabilidade')">🏠 Minhas Contas</button>
-
-        </div>
-
-    </header>
-
-
+    </div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="mudarAba('dashboard')">📊 Painel da Rua</button>
+        <button class="tab-btn" onclick="mudarAba('contabilidade')">🏡 Minhas Contas</button>
+    </div>
+</header>
 
 <div class="container">
-
-    
-
-    <!-- ABA 1: DASHBOARD DA RUA -->
-
+    <!-- ABA 1 - DASHBOARD PERFORMANCE -->
     <div id="aba-dashboard" class="tab-content active">
-
         <div class="kpi-grid">
-
-            <div class="kpi-card">
-
-                <h3>Meta Mensal</h3>
-
-                <p id="kpi-meta-mensal">R$ 0,00</p>
-
-            </div>
-
-            <div class="kpi-card danger">
-
-                <h3>Custo Diário</h3>
-
-                <p id="kpi-custo-diario">R$ 0,00</p>
-
-            </div>
-
-            <div class="kpi-card">
-
-                <h3>Alvo Bruto Dia</h3>
-
-                <p id="kpi-faturamento-alvo">R$ 0,00</p>
-
-            </div>
-
-            <div class="kpi-card success">
-
-                <h3>Acumulado Rua</h3>
-
-                <p id="kpi-acumulado">R$ 0,00</p>
-
-            </div>
-
+            <div class="kpi-card"><h3>Meta Mensal</h3><p id="kpi-meta-mensal">R$ 0</p></div>
+            <div class="kpi-card danger"><h3>Custo Diário</h3><p id="kpi-custo-diario">R$ 0</p></div>
+            <div class="kpi-card"><h3>Meta Bruto/Dia</h3><p id="kpi-faturamento-alvo">R$ 0</p></div>
+            <div class="kpi-card success"><h3>Lucro Acumulado</h3><p id="kpi-acumulado">R$ 0</p></div>
         </div>
-
-
 
         <div class="main-layout">
-
             <div>
-
                 <div class="panel">
-
-                    <h2>1. Configuração de Custos</h2>
-
-                    <div class="form-group">
-
-                        <label>Contas Fixas do Mês</label>
-
-                        <input type="number" id="cfg-contas" value="0">
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>Dias de Trabalho/Mês</label>
-
-                        <input type="number" id="cfg-dias" value="0">
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>Gasto Diário Moto (R$)</label>
-
-                        <input type="number" id="cfg-moto" value="0">
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>Gasto Diário Carro (R$)</label>
-
-                        <input type="number" id="cfg-carro" value="0">
-
-                    </div>
-
-                    <button onclick="salvarConfiguracoes()">Atualizar Parâmetros</button>
-
+                    <h2>⚙️ Custos & Metas</h2>
+                    <div class="form-group"><label>📦 Contas Fixas do Mês (R$)</label><input type="number" id="cfg-contas" placeholder="Ex: 2500"></div>
+                    <div class="form-group"><label>📅 Dias trabalhados no mês</label><input type="number" id="cfg-dias" placeholder="Ex: 22"></div>
+                    <div class="form-group"><label>⛽ Gasto Diário Moto (R$)</label><input type="number" id="cfg-moto" placeholder="Combustível + manutenção"></div>
+                    <div class="form-group"><label>🚗 Gasto Diário Carro (R$)</label><input type="number" id="cfg-carro" placeholder="Se usar carro"></div>
+                    <button onclick="salvarConfiguracoes()">💾 Salvar Metas</button>
                 </div>
 
-
-
                 <div class="panel">
-
-                    <h2>2. Apontamento do Dia</h2>
-
+                    <h2>📝 Registrar Dia de Rua</h2>
                     <form id="form-registro">
-
-                        <div class="form-group">
-
-                            <label>Data</label>
-
-                            <input type="date" id="reg-data" required>
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <label>Faturamento Bruto (R$)</label>
-
-                            <input type="number" step="0.01" id="reg-bruto" required>
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <label>Gastos Extras na Rua</label>
-
-                            <input type="number" step="0.01" id="reg-extra" value="0">
-
-                        </div>
-
-                        <button type="submit">Salvar Dia</button>
-
+                        <div class="form-group"><label>📅 Data</label><input type="date" id="reg-data" required></div>
+                        <div class="form-group"><label>💰 Faturamento Bruto (R$)</label><input type="number" step="0.01" id="reg-bruto" placeholder="Entregas + corridas"></div>
+                        <div class="form-group"><label>⚠️ Gastos Extras (R$)</label><input type="number" step="0.01" id="reg-extra" value="0" placeholder="Lanche, pedágio etc"></div>
+                        <button type="submit">✅ Salvar Corrida do Dia</button>
                     </form>
-
                 </div>
-
             </div>
-
-
 
             <div>
-
+                <!-- GRÁFICO COMPACTO E ESTÁVEL: LINHA META VS LIQUIDO -->
                 <div class="panel">
-
-                    <h2>Desempenho vs Meta Diária</h2>
-
-                    <canvas id="chartPerformance" style="width:100%; height:200px;"></canvas>
-
+                    <h2>📈 Desempenho vs Meta Diária</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="graficoPerformance" width="400" height="180" style="max-width:100%; height:180px; width:100%"></canvas>
+                    </div>
+                    <p style="font-size: 0.7rem; text-align:center; margin-top: 8px; color:#4b6a7c;">📌 Linha verde: lucro líquido do dia | Linha vermelha: meta de lucro diário</p>
                 </div>
 
-
-
                 <div class="panel">
-
-                    <h2>Histórico de Corridas</h2>
-
+                    <h2>📋 Histórico de Corridas</h2>
                     <div class="table-container">
-
                         <table id="tabela-registros">
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>Data</th>
-
-                                    <th>Bruto</th>
-
-                                    <th>Custos</th>
-
-                                    <th>Líquido</th>
-
-                                    <th>Saldo Meta</th>
-
-                                    <th>Ação</th>
-
-                                </tr>
-
-                            </thead>
-
+                            <thead><tr><th>Data</th><th>Bruto</th><th>Custo Total</th><th>Líquido</th><th>Diferença Meta</th><th></th></tr></thead>
                             <tbody></tbody>
-
                         </table>
-
                     </div>
-
                     <div class="action-buttons">
-
-                        <button class="btn-excel" onclick="exportarExcelRua()">📊 Excel</button>
-
-                        <button class="btn-danger" onclick="limparDadosRua()">🗑️ Zerar</button>
-
+                        <button class="btn-excel" onclick="exportarExcelRua()">📎 Exportar Excel</button>
+                        <button class="btn-danger" onclick="limparDadosRua()">🗑️ Resetar Histórico</button>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-
-
-    <!-- ABA 2: CONTABILIDADE PESSOAL -->
-
+    <!-- ABA 2 - CONTABILIDADE PESSOAL -->
     <div id="aba-contabilidade" class="tab-content">
-
         <div class="kpi-grid">
-
-            <div class="kpi-card success">
-
-                <h3>Vindo da Rua</h3>
-
-                <p id="kpi-conta-receita">R$ 0,00</p>
-
-                <small>Seu Lucro Acumulado</small>
-
-            </div>
-
-            <div class="kpi-card danger">
-
-                <h3>Contas Pagas</h3>
-
-                <p id="kpi-conta-despesas">R$ 0,00</p>
-
-                <small>Total quitado no mês</small>
-
-            </div>
-
-            <div class="kpi-card warning" style="grid-column: span 2;">
-
-                <h3>Dinheiro Livre (Bolso)</h3>
-
-                <p id="kpi-conta-livre">R$ 0,00</p>
-
-                <small>O que sobrou limpo de verdade</small>
-
-            </div>
-
+            <div class="kpi-card success"><h3>💰 Vindo da Rua</h3><p id="kpi-conta-receita">R$ 0</p><small>Lucro líquido total</small></div>
+            <div class="kpi-card danger"><h3>🧾 Contas Pagas</h3><p id="kpi-conta-despesas">R$ 0</p><small>Despesas quitadas</small></div>
+            <div class="kpi-card warning"><h3>💸 Dinheiro Livre</h3><p id="kpi-conta-livre">R$ 0</p><small>Lucro - contas pagas</small></div>
         </div>
 
-
-
-        <div class="main-layout half">
-
+        <div class="main-layout" style="grid-template-columns:1fr 1fr;">
             <div class="panel">
-
-                <h2>Pagar Despesa Pessoal</h2>
-
+                <h2>➕ Registrar Conta</h2>
                 <form id="form-despesa">
-
-                    <div class="form-group">
-
-                        <label>Data de Pagamento</label>
-
-                        <input type="date" id="desp-data" required>
-
+                    <div class="form-group"><label>📅 Data Pagamento</label><input type="date" id="desp-data" required></div>
+                    <div class="form-group"><label>📝 Descrição</label><input type="text" id="desp-desc" placeholder="Ex: Financiamento moto"></div>
+                    <div class="form-group"><label>🏷️ Categoria</label>
+                        <select id="desp-cat"><option value="veiculo">🚗 Veículo / Moto</option><option value="casa">🏠 Casa / Aluguel</option><option value="pessoal">🎮 Pessoal / Lazer</option></select>
                     </div>
-
-                    <div class="form-group">
-
-                        <label>Descrição (Ex: Parcela Carro)</label>
-
-                        <input type="text" id="desp-desc" required>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>Categoria</label>
-
-                        <select id="desp-cat">
-
-                            <option value="veiculo">Parcelas Veículo</option>
-
-                            <option value="casa">Contas da Casa</option>
-
-                            <option value="pessoal">Pessoal / Lazer</option>
-
-                        </select>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>Valor (R$)</label>
-
-                        <input type="number" step="0.01" id="desp-valor" required>
-
-                    </div>
-
-                    <button type="submit">Registrar Pagamento</button>
-
+                    <div class="form-group"><label>💵 Valor (R$)</label><input type="number" step="0.01" id="desp-valor" required></div>
+                    <button type="submit">📌 Registrar Pagamento</button>
                 </form>
-
             </div>
-
-
-
             <div class="panel">
-
-                <h2>Extrato de Pagamentos</h2>
-
+                <h2>📑 Extrato de Despesas</h2>
                 <div class="table-container">
-
                     <table id="tabela-despesas">
-
-                        <thead>
-
-                            <tr>
-
-                                <th>Data</th>
-
-                                <th>Descrição</th>
-
-                                <th>Categoria</th>
-
-                                <th>Valor</th>
-
-                                <th>Ação</th>
-
-                            </tr>
-
-                        </thead>
-
+                        <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead>
                         <tbody></tbody>
-
                     </table>
-
                 </div>
-
                 <div class="action-buttons">
-
-                    <button class="btn-excel" onclick="exportarExcelContabilidade()">📊 Excel</button>
-
-                    <button class="btn-danger" onclick="limparDadosContabilidade()">🗑️ Zerar</button>
-
+                    <button class="btn-excel" onclick="exportarExcelContabilidade()">📎 Excel</button>
+                    <button class="btn-danger" onclick="limparDadosContabilidade()">🗑️ Zerar Contas</button>
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
-
-
 </div>
 
-
-
 <script>
-
-    const frases = [
-
-        "⚡ 'Acelera com juízo! Cada entrega te deixa mais perto da meta.'",
-
-        "🎯 'Foco na meta diária, o tanque tá cheio e o bolso vai encher!'",
-
-        "🛡️ 'Pilote com segurança. Alguém te espera em casa com o sorriso no rosto.'",
-
-        "💰 'Faturamento é vaidade, o lucro líquido é a realidade. Controle tudo!'",
-
-        "🚀 'Nenhum asfalto é duro demais para quem sabe onde quer chegar.'",
-
-        "🛣️ 'Devagar e sempre, cada corrida paga uma conta da sua vitória!'",
-
-        "🔥 'O motor gira, o dinheiro entra e o futuro da sua família se constrói.'"
-
-    ];
-
-
-
-    document.getElementById('frase-motivacional').innerText = frases[Math.floor(Math.random() * frases.length)];
-
-
-
-    function mudarAba(abaId) {
-
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-
-        
-
-        if(abaId === 'dashboard') {
-
-            document.querySelectorAll('.tab-btn')[0].classList.add('active');
-
-            document.getElementById('aba-dashboard').classList.add('active');
-
-        } else {
-
-            document.querySelectorAll('.tab-btn')[1].classList.add('active');
-
-            document.getElementById('aba-contabilidade').classList.add('active');
-
-        }
-
-    }
-
-
-
-    // Configuração inicializada totalmente ZERADA
-
-    let config = JSON.parse(localStorage.getItem('moto_config')) || { contas: 0, dias: 0, moto: 0, carro: 0 };
-
+    // ---------- DADOS GLOBAIS ----------
+    let config = JSON.parse(localStorage.getItem('moto_config')) || { contas: 0, dias: 22, moto: 35, carro: 0 };
     let registrosRua = JSON.parse(localStorage.getItem('moto_registros')) || [];
-
     let despesasPessoais = JSON.parse(localStorage.getItem('moto_despesas')) || [];
 
-    
+    let chartPerformance = null;
+    let lucroLiquidoTotal = 0; // será atualizado
 
-    let chartInstance = null;
+    // Frases motivacionais
+    const frases = [
+        "🏍️ 'Com segurança e garra, a meta é só questão de tempo!'", "💰 'Cada real economizado hoje é vitória amanhã.'",
+        "📈 'Gráfico bonito vem de disciplina na rua e em casa.'", "🚀 'Corrida firme, lucro certo: mantenha o foco!'",
+        "🧠 'Controle é combustível para o futuro da sua família.'", "🛵 'Nenhum trânsito é páreo pra quem tem planejamento.'"
+    ];
+    document.getElementById('frase-motivacional').innerHTML = `✨ ${frases[Math.floor(Math.random() * frases.length)]}`;
 
-    let lucroLiquidoAcumuladoGlobal = 0;
+    // Helper formatação
+    function formatMoney(v) { return v.toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }); }
 
+    // Atualiza TUDO (Rua + Gráfico + KPI)
+    function atualizarDashboardRua() {
+        const custoFixoDiario = (config.moto || 0) + (config.carro || 0);
+        const diasTrab = config.dias > 0 ? config.dias : 1;
+        const metaLucroPorDia = config.contas / diasTrab;
+        const metaBrutoNecessario = metaLucroPorDia + custoFixoDiario;
 
-
-    document.getElementById('reg-data').valueAsDate = new Date();
-
-    document.getElementById('desp-data').valueAsDate = new Date();
-
-
-
-    function formatarMoeda(valor) { return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
-
-
-
-    function atualizarCalculosRua() {
-
-        const custoFixo = config.moto + config.carro;
-
-        // Evita divisão por zero caso dias seja 0
-
-        const metaLiq = config.dias > 0 ? (config.contas / config.dias) : 0;
-
-        
-
-        document.getElementById('kpi-meta-mensal').innerText = formatarMoeda(config.contas);
-
-        document.getElementById('kpi-custo-diario').innerText = formatarMoeda(custoFixo);
-
-        document.getElementById('kpi-faturamento-alvo').innerText = formatarMoeda(metaLiq + custoFixo);
-
-        
-
+        document.getElementById('kpi-meta-mensal').innerText = formatMoney(config.contas);
+        document.getElementById('kpi-custo-diario').innerText = formatMoney(custoFixoDiario);
+        document.getElementById('kpi-faturamento-alvo').innerText = formatMoney(metaBrutoNecessario);
         document.getElementById('cfg-contas').value = config.contas;
-
         document.getElementById('cfg-dias').value = config.dias;
-
         document.getElementById('cfg-moto').value = config.moto;
-
         document.getElementById('cfg-carro').value = config.carro;
 
-
-
-        renderizarTabelaRua(metaLiq, custoFixo);
-
-        renderizarGrafico(metaLiq);
-
-        atualizarCalculosContabilidade(); 
-
-    }
-
-
-
-    function salvarConfiguracoes() {
-
-        config.contas = parseFloat(document.getElementById('cfg-contas').value) || 0;
-
-        config.dias = parseInt(document.getElementById('cfg-dias').value) || 0;
-
-        config.moto = parseFloat(document.getElementById('cfg-moto').value) || 0;
-
-        config.carro = parseFloat(document.getElementById('cfg-carro').value) || 0;
-
-        localStorage.setItem('moto_config', JSON.stringify(config));
-
-        atualizarCalculosRua();
-
-    }
-
-
-
-    document.getElementById('form-registro').addEventListener('submit', function(e) {
-
-        e.preventDefault();
-
-        const [ano, mes, dia] = document.getElementById('reg-data').value.split('-');
-
-        registrosRua.push({
-
-            id: Date.now(),
-
-            data: `${dia}/${mes}/${ano}`,
-
-            bruto: parseFloat(document.getElementById('reg-bruto').value) || 0,
-
-            extra: parseFloat(document.getElementById('reg-extra').value) || 0
-
+        // calcular lucro acumulado
+        let acumulado = 0;
+        registrosRua.forEach(reg => {
+            const custoTotal = custoFixoDiario + (reg.extra || 0);
+            const lucroDia = reg.bruto - custoTotal;
+            acumulado += lucroDia;
         });
-
-        registrosRua.sort((a, b) => new Date(a.id) - new Date(b.id));
-
-        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
-
-        document.getElementById('reg-bruto').value = '';
-
-        document.getElementById('reg-extra').value = '0';
-
-        atualizarCalculosRua();
-
-    });
-
-
-
-    function excluirRegistroRua(id) {
-
-        registrosRua = registrosRua.filter(r => r.id !== id);
-
-        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
-
-        atualizarCalculosRua();
-
+        lucroLiquidoTotal = acumulado;
+        document.getElementById('kpi-acumulado').innerText = formatMoney(acumulado);
+        
+        renderTabelaRua(metaLucroPorDia, custoFixoDiario);
+        renderGraficoCompacto(metaLucroPorDia);
+        atualizarContabilidade();
     }
 
+    function renderTabelaRua(metaDiaria, custoFixo) {
+        const tbody = document.querySelector('#tabela-registros tbody');
+        tbody.innerHTML = '';
+        if (registrosRua.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Nenhum registro de corrida</td></tr>';
+            return;
+        }
+        registrosRua.slice().reverse().forEach(reg => {
+            const custoTotal = custoFixo + (reg.extra || 0);
+            const lucro = reg.bruto - custoTotal;
+            const diferenca = lucro - metaDiaria;
+            tbody.innerHTML += `
+                <tr>
+                    <td>${reg.data}</td>
+                    <td>${formatMoney(reg.bruto)}</td>
+                    <td>${formatMoney(custoTotal)}</td>
+                    <td class="${lucro >= 0 ? 'text-success' : 'text-danger'}">${formatMoney(lucro)}</td>
+                    <td class="${diferenca >= 0 ? 'text-success' : 'text-danger'}">${diferenca >= 0 ? '+' : ''}${formatMoney(diferenca)}</td>
+                    <td><button class="btn-del" onclick="excluirRegistro(${reg.id})">✖️</button></td>
+                </tr>
+            `;
+        });
+    }
 
+    // gráfico LEVE, sem barras enormes, sem esticar tela, com altura fixa dentro do wrapper
+    function renderGraficoCompacto(metaPorDia) {
+        const ctx = document.getElementById('graficoPerformance').getContext('2d');
+        if (chartPerformance) chartPerformance.destroy();
+        if (!registrosRua.length) {
+            // gráfico vazio com mensagem
+            chartPerformance = new Chart(ctx, {
+                type: 'line',
+                data: { labels: ['Nenhum dado'], datasets: [{ label: 'Líquido', data: [0], borderColor: '#2ecc71' }] },
+                options: { responsive: true, maintainAspectRatio: true }
+            });
+            return;
+        }
+        const ordenados = [...registrosRua].sort((a,b) => new Date(a.id) - new Date(b.id));
+        const labels = ordenados.map(r => r.data);
+        const custoFixoDiario = (config.moto || 0) + (config.carro || 0);
+        const dadosLucro = ordenados.map(r => {
+            const custoTotal = custoFixoDiario + (r.extra || 0);
+            return Number((r.bruto - custoTotal).toFixed(2));
+        });
+        const linhaMeta = Array(ordenados.length).fill(metaPorDia);
+
+        chartPerformance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: '💰 Lucro Líquido Diário', data: dadosLucro, borderColor: '#2c9c6e', backgroundColor: 'rgba(46,204,113,0.05)', borderWidth: 2.5, pointRadius: 3, pointBackgroundColor: '#1e6f4c', tension: 0.2, fill: true },
+                    { label: '🎯 Meta de Lucro / Dia', data: linhaMeta, borderColor: '#e67e22', borderWidth: 2.5, borderDash: [6, 6], pointRadius: 0, fill: false }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${formatMoney(ctx.raw)}` } },
+                    legend: { position: 'top', labels: { font: { size: 10 } } }
+                },
+                scales: { y: { ticks: { callback: (val) => formatMoney(val), maxTicksLimit: 5 }, grid: { color: '#e9ecef' } } }
+            }
+        });
+    }
+
+    function excluirRegistro(id) {
+        registrosRua = registrosRua.filter(r => r.id !== id);
+        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
+        atualizarDashboardRua();
+    }
 
     function limparDadosRua() {
-
-        if(confirm("Zerar as corridas da rua?")) {
-
+        if(confirm("Tem certeza? Apagará todo o histórico de desempenho da rua.")){
             registrosRua = [];
-
             localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
-
-            atualizarCalculosRua();
-
+            atualizarDashboardRua();
         }
-
     }
 
-
-
-    function renderizarTabelaRua(metaLiq, custoFixo) {
-
-        const tbody = document.querySelector('#tabela-registros tbody');
-
-        tbody.innerHTML = '';
-
-        lucroLiquidoAcumuladoGlobal = 0;
-
-
-
-        registrosRua.forEach(r => {
-
-            const custoTotal = custoFixo + r.extra;
-
-            const lucro = r.bruto - custoTotal;
-
-            lucroLiquidoAcumuladoGlobal += lucro;
-
-            const saldo = lucro - metaLiq;
-
-
-
-            tbody.innerHTML += `
-
-                <tr>
-
-                    <td>${r.data}</td>
-
-                    <td>${formatarMoeda(r.bruto)}</td>
-
-                    <td>${formatarMoeda(custoTotal)}</td>
-
-                    <td>${formatarMoeda(lucro)}</td>
-
-                    <td class="${saldo >= 0 ? 'text-success' : 'text-danger'}">${saldo >= 0 ? '+' : ''}${formatarMoeda(saldo)}</td>
-
-                    <td><button class="btn-del" onclick="excluirRegistroRua(${r.id})">❌</button></td>
-
-                </tr>`;
-
-        });
-
-        document.getElementById('kpi-acumulado').innerText = formatarMoeda(lucroLiquidoAcumuladoGlobal);
-
-    }
-
-
-
-    function atualizarCalculosContabilidade() {
-
-        document.getElementById('kpi-conta-receita').innerText = formatarMoeda(lucroLiquidoAcumuladoGlobal);
-
-        
-
-        let totalDespesas = 0;
-
-        const tbody = document.querySelector('#tabela-despesas tbody');
-
-        tbody.innerHTML = '';
-
-
-
-        despesasPessoais.forEach(d => {
-
-            totalDespesas += d.valor;
-
-            let tagClass = d.cat === 'casa' ? 'tag-casa' : (d.cat === 'veiculo' ? 'tag-veiculo' : 'tag-pessoal');
-
-            let nomeCat = d.cat === 'casa' ? 'Casa' : (d.cat === 'veiculo' ? 'Veículo' : 'Pessoal');
-
-
-
-            tbody.innerHTML += `
-
-                <tr>
-
-                    <td>${d.data}</td>
-
-                    <td>${d.desc}</td>
-
-                    <td><span class="tag ${tagClass}">${nomeCat}</span></td>
-
-                    <td class="text-danger">-${formatarMoeda(d.valor)}</td>
-
-                    <td><button class="btn-del" onclick="excluirDespesa(${d.id})">❌</button></td>
-
-                </tr>`;
-
-        });
-
-
-
-        document.getElementById('kpi-conta-despesas').innerText = formatarMoeda(totalDespesas);
-
-        
-
-        const caixaLivre = lucroLiquidoAcumuladoGlobal - totalDespesas;
-
-        const elmCaixa = document.getElementById('kpi-conta-livre');
-
-        elmCaixa.innerText = formatarMoeda(caixaLivre);
-
-        elmCaixa.style.color = caixaLivre >= 0 ? 'var(--success)' : 'var(--danger)';
-
-    }
-
-
-
-    document.getElementById('form-despesa').addEventListener('submit', function(e) {
-
+    document.getElementById('form-registro').addEventListener('submit', (e) => {
         e.preventDefault();
-
-        const [ano, mes, dia] = document.getElementById('desp-data').value.split('-');
-
-        despesasPessoais.push({
-
+        const dataRaw = document.getElementById('reg-data').value;
+        const [ano, mes, dia] = dataRaw.split('-');
+        const dataFormatada = `${dia}/${mes}/${ano}`;
+        const bruto = parseFloat(document.getElementById('reg-bruto').value) || 0;
+        const extra = parseFloat(document.getElementById('reg-extra').value) || 0;
+        if(bruto === 0 && extra === 0) { alert("Informe pelo menos o faturamento bruto do dia."); return; }
+        registrosRua.push({
             id: Date.now(),
-
-            data: `${dia}/${mes}/${ano}`,
-
-            desc: document.getElementById('desp-desc').value,
-
-            cat: document.getElementById('desp-cat').value,
-
-            valor: parseFloat(document.getElementById('desp-valor').value) || 0
-
+            data: dataFormatada,
+            bruto: bruto,
+            extra: extra
         });
-
-        despesasPessoais.sort((a, b) => new Date(a.id) - new Date(b.id));
-
-        localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
-
-        
-
-        document.getElementById('desp-desc').value = '';
-
-        document.getElementById('desp-valor').value = '';
-
-        atualizarCalculosContabilidade();
-
+        registrosRua.sort((a,b) => a.id - b.id);
+        localStorage.setItem('moto_registros', JSON.stringify(registrosRua));
+        document.getElementById('reg-bruto').value = '';
+        document.getElementById('reg-extra').value = '0';
+        atualizarDashboardRua();
     });
 
+    function salvarConfiguracoes() {
+        config.contas = parseFloat(document.getElementById('cfg-contas').value) || 0;
+        config.dias = parseInt(document.getElementById('cfg-dias').value) || 1;
+        config.moto = parseFloat(document.getElementById('cfg-moto').value) || 0;
+        config.carro = parseFloat(document.getElementById('cfg-carro').value) || 0;
+        if(config.dias <= 0) config.dias = 1;
+        localStorage.setItem('moto_config', JSON.stringify(config));
+        atualizarDashboardRua();
+    }
 
+    // ---------- CONTABILIDADE PESSOAL ----------
+    function atualizarContabilidade() {
+        const receitaTotal = lucroLiquidoTotal;
+        document.getElementById('kpi-conta-receita').innerText = formatMoney(receitaTotal);
+        let totalDespesas = 0;
+        const tbody = document.querySelector('#tabela-despesas tbody');
+        tbody.innerHTML = '';
+        if(despesasPessoais.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">Nenhuma conta registrada</td></tr>';
+        } else {
+            despesasPessoais.slice().reverse().forEach(d => {
+                totalDespesas += d.valor;
+                let tagClass = d.cat === 'casa' ? 'tag-casa' : (d.cat === 'veiculo' ? 'tag-veiculo' : 'tag-pessoal');
+                let nomeCat = d.cat === 'casa' ? 'Casa' : (d.cat === 'veiculo' ? 'Veículo' : 'Pessoal');
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${d.data}</td><td>${d.desc}</td>
+                        <td><span class="tag ${tagClass}">${nomeCat}</span></td>
+                        <td class="text-danger">-${formatMoney(d.valor)}</td>
+                        <td><button class="btn-del" onclick="excluirDespesa(${d.id})">✖️</button></td>
+                    </tr>
+                `;
+            });
+        }
+        document.getElementById('kpi-conta-despesas').innerText = formatMoney(totalDespesas);
+        const livre = receitaTotal - totalDespesas;
+        const elmLivre = document.getElementById('kpi-conta-livre');
+        elmLivre.innerText = formatMoney(livre);
+        elmLivre.style.color = livre >= 0 ? '#27ae60' : '#e74c3c';
+    }
+
+    document.getElementById('form-despesa').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const dataRaw = document.getElementById('desp-data').value;
+        const [ano, mes, dia] = dataRaw.split('-');
+        const dataFormat = `${dia}/${mes}/${ano}`;
+        const desc = document.getElementById('desp-desc').value.trim();
+        if(!desc) { alert("Descreva a despesa"); return; }
+        const valor = parseFloat(document.getElementById('desp-valor').value) || 0;
+        if(valor <= 0) { alert("Valor inválido"); return; }
+        despesasPessoais.push({
+            id: Date.now(),
+            data: dataFormat,
+            desc: desc,
+            cat: document.getElementById('desp-cat').value,
+            valor: valor
+        });
+        localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
+        document.getElementById('desp-desc').value = '';
+        document.getElementById('desp-valor').value = '';
+        atualizarContabilidade();
+    });
 
     function excluirDespesa(id) {
-
         despesasPessoais = despesasPessoais.filter(d => d.id !== id);
-
         localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
-
-        atualizarCalculosContabilidade();
-
+        atualizarContabilidade();
     }
-
-
 
     function limparDadosContabilidade() {
-
-        if(confirm("Deseja apagar todas as contas registradas?")) {
-
+        if(confirm("Apagar todas as despesas pessoais?")) {
             despesasPessoais = [];
-
             localStorage.setItem('moto_despesas', JSON.stringify(despesasPessoais));
-
-            atualizarCalculosContabilidade();
-
+            atualizarContabilidade();
         }
-
     }
-
-
-
-    function renderizarGrafico(metaLiq) {
-
-        const ctx = document.getElementById('chartPerformance').getContext('2d');
-
-        if (chartInstance) chartInstance.destroy();
-
-        if (registrosRua.length === 0) return;
-
-
-
-        chartInstance = new Chart(ctx, {
-
-            type: 'line',
-
-            data: {
-
-                labels: registrosRua.map(r => r.data),
-
-                datasets: [
-
-                    { label: 'Líquido', data: registrosRua.map(r => r.bruto - (config.moto + config.carro + r.extra)), borderColor: '#2ecc71', backgroundColor: 'rgba(46, 204, 113, 0.1)', fill: true },
-
-                    { label: 'Meta', data: Array(registrosRua.length).fill(metaLiq), borderColor: '#e74c3c', borderDash: [5, 5], fill: false }
-
-                ]
-
-            },
-
-            options: { responsive: true, maintainAspectRatio: false }
-
-        });
-
-    }
-
-
 
     function exportarExcelRua() {
-
+        if(!registrosRua.length) { alert("Sem dados na rua"); return; }
         const wb = XLSX.utils.book_new();
-
         const ws = XLSX.utils.json_to_sheet(registrosRua);
-
-        XLSX.utils.book_append_sheet(wb, ws, "Corridas");
-
-        XLSX.writeFile(wb, `GiroCerto_Rua.xlsx`);
-
+        XLSX.utils.book_append_sheet(wb, ws, "Desempenho_Rua");
+        XLSX.writeFile(wb, `GiroCerto_Rua_${new Date().toISOString().slice(0,10)}.xlsx`);
     }
-
-
-
     function exportarExcelContabilidade() {
-
+        if(!despesasPessoais.length) { alert("Sem despesas registradas"); return; }
         const wb = XLSX.utils.book_new();
-
         const ws = XLSX.utils.json_to_sheet(despesasPessoais);
-
-        XLSX.utils.book_append_sheet(wb, ws, "Despesas");
-
-        XLSX.writeFile(wb, `GiroCerto_Contas.xlsx`);
-
+        XLSX.utils.book_append_sheet(wb, ws, "Minhas_Contas");
+        XLSX.writeFile(wb, `GiroCerto_Contas_${new Date().toISOString().slice(0,10)}.xlsx`);
     }
 
+    function mudarAba(aba) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        if(aba === 'dashboard') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('aba-dashboard').classList.add('active');
+            atualizarDashboardRua();
+        } else {
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            document.getElementById('aba-contabilidade').classList.add('active');
+            atualizarContabilidade();
+        }
+    }
 
-
-    // Executa os cálculos iniciais com os valores zerados
-
-    atualizarCalculosRua();
-
+    // Inicialização completa
+    function init() {
+        document.getElementById('reg-data').valueAsDate = new Date();
+        document.getElementById('desp-data').valueAsDate = new Date();
+        atualizarDashboardRua();
+    }
+    init();
 </script>
-
 </body>
-
 </html>
