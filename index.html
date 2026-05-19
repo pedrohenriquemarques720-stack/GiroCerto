@@ -38,7 +38,6 @@
             align-items: center;
         }
 
-        /* HEADER ESTILIZADO E CHAMATIVO */
         header {
             background: linear-gradient(135deg, #1f4e78 0%, #0f2a42 100%);
             color: white;
@@ -58,7 +57,6 @@
             margin-bottom: 2px;
         }
         
-        /* Frase Motivacional Dinâmica */
         .motivational-box {
             background: rgba(255, 255, 255, 0.1);
             border-left: 4px solid var(--success);
@@ -194,7 +192,6 @@
     <header>
         <div class="header-content">
             <h1>🏁 Giro Certo 🏍️</h1>
-            <!-- Box de Frase que atualiza sozinha -->
             <div class="motivational-box" id="frase-motivacional">
                 ⚡ 🧠 "Mente firme, piloto seguro. A meta do dia te espera!"
             </div>
@@ -212,15 +209,15 @@
         <div class="kpi-grid">
             <div class="kpi-card">
                 <h3>Meta Mensal</h3>
-                <p id="kpi-meta-mensal">R$ 4.198,00</p>
+                <p id="kpi-meta-mensal">R$ 0,00</p>
             </div>
             <div class="kpi-card danger">
                 <h3>Custo Diário</h3>
-                <p id="kpi-custo-diario">R$ 80,00</p>
+                <p id="kpi-custo-diario">R$ 0,00</p>
             </div>
             <div class="kpi-card">
                 <h3>Alvo Bruto Dia</h3>
-                <p id="kpi-faturamento-alvo">R$ 241,46</p>
+                <p id="kpi-faturamento-alvo">R$ 0,00</p>
             </div>
             <div class="kpi-card success">
                 <h3>Acumulado Rua</h3>
@@ -234,19 +231,19 @@
                     <h2>1. Configuração de Custos</h2>
                     <div class="form-group">
                         <label>Contas Fixas do Mês</label>
-                        <input type="number" id="cfg-contas" value="4198">
+                        <input type="number" id="cfg-contas" value="0">
                     </div>
                     <div class="form-group">
                         <label>Dias de Trabalho/Mês</label>
-                        <input type="number" id="cfg-dias" value="26">
+                        <input type="number" id="cfg-dias" value="0">
                     </div>
                     <div class="form-group">
                         <label>Gasto Diário Moto (R$)</label>
-                        <input type="number" id="cfg-moto" value="20">
+                        <input type="number" id="cfg-moto" value="0">
                     </div>
                     <div class="form-group">
                         <label>Gasto Diário Carro (R$)</label>
-                        <input type="number" id="cfg-carro" value="60">
+                        <input type="number" id="cfg-carro" value="0">
                     </div>
                     <button onclick="salvarConfiguracoes()">Atualizar Parâmetros</button>
                 </div>
@@ -378,7 +375,6 @@
 </div>
 
 <script>
-    // LISTA DE FRASES MOTIVACIONAIS PARA QUEM É DA RUA
     const frases = [
         "⚡ 'Acelera com juízo! Cada entrega te deixa mais perto da meta.'",
         "🎯 'Foco na meta diária, o tanque tá cheio e o bolso vai encher!'",
@@ -389,7 +385,6 @@
         "🔥 'O motor gira, o dinheiro entra e o futuro da sua família se constrói.'"
     ];
 
-    // Sorteia uma frase ao carregar
     document.getElementById('frase-motivacional').innerText = frases[Math.floor(Math.random() * frases.length)];
 
     function mudarAba(abaId) {
@@ -405,7 +400,8 @@
         }
     }
 
-    let config = JSON.parse(localStorage.getItem('moto_config')) || { contas: 4198, dias: 26, moto: 20, carro: 60 };
+    // Configuração inicializada totalmente ZERADA
+    let config = JSON.parse(localStorage.getItem('moto_config')) || { contas: 0, dias: 0, moto: 0, carro: 0 };
     let registrosRua = JSON.parse(localStorage.getItem('moto_registros')) || [];
     let despesasPessoais = JSON.parse(localStorage.getItem('moto_despesas')) || [];
     
@@ -419,7 +415,8 @@
 
     function atualizarCalculosRua() {
         const custoFixo = config.moto + config.carro;
-        const metaLiq = config.contas / config.dias;
+        // Evita divisão por zero caso dias seja 0
+        const metaLiq = config.dias > 0 ? (config.contas / config.dias) : 0;
         
         document.getElementById('kpi-meta-mensal').innerText = formatarMoeda(config.contas);
         document.getElementById('kpi-custo-diario').innerText = formatarMoeda(custoFixo);
@@ -437,7 +434,7 @@
 
     function salvarConfiguracoes() {
         config.contas = parseFloat(document.getElementById('cfg-contas').value) || 0;
-        config.dias = parseInt(document.getElementById('cfg-dias').value) || 1;
+        config.dias = parseInt(document.getElementById('cfg-dias').value) || 0;
         config.moto = parseFloat(document.getElementById('cfg-moto').value) || 0;
         config.carro = parseFloat(document.getElementById('cfg-carro').value) || 0;
         localStorage.setItem('moto_config', JSON.stringify(config));
@@ -592,6 +589,7 @@
         XLSX.writeFile(wb, `GiroCerto_Contas.xlsx`);
     }
 
+    // Executa os cálculos iniciais com os valores zerados
     atualizarCalculosRua();
 </script>
 </body>
